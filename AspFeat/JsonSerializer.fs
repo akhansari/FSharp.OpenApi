@@ -1,5 +1,5 @@
 ﻿[<RequireQualifiedAccess>]
-module FalcoSwagger.JsonSerializer
+module AspFeat.JsonSerializer
 
 open System.Text.Json
 open System.Text.Json.Serialization
@@ -10,6 +10,7 @@ let setupOptions (opt: JsonSerializerOptions) =
     opt.Converters.Add(
         JsonFSharpConverter(
             JsonUnionEncoding.FSharpLuLike,
+            unionTagCaseInsensitive = true,
             unionTagNamingPolicy = JsonNamingPolicy.CamelCase))
     opt.IgnoreNullValues <- true
     opt
@@ -17,13 +18,3 @@ let setupOptions (opt: JsonSerializerOptions) =
 let createOptions () =
     JsonSerializerOptions ()
     |> setupOptions
-
-let options =
-    createOptions ()
-
-let serialize value =
-    JsonSerializer.Serialize (value, options)
-
-let deserialize<'T> (json: string) =
-    JsonSerializer.Deserialize<'T> (json, options)
-

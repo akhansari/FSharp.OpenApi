@@ -1,11 +1,13 @@
-﻿namespace FalcoSwagger
+﻿namespace AspFeat.Builder
 
 open System
-open Microsoft.AspNetCore.Hosting
-open Microsoft.Extensions.DependencyInjection
 open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Hosting
+open Microsoft.AspNetCore.Http.Json
+open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open AspFeat
 
 type AspFeature =
     ( (IServiceCollection -> IServiceCollection) *
@@ -14,24 +16,43 @@ type AspFeature =
 [<RequireQualifiedAccess>]
 module Asp =
 
-    let hostBuilderWith (features: AspFeature list) =
+    let createWebHost
+        (extendWebHost: IWebHostBuilder -> IWebHostBuilder)
+        (features: AspFeature list)
+        =
 
         let configureServices (_: WebHostBuilderContext) (services: IServiceCollection) =
+
+            services.Configure(fun (o: JsonOptions) ->
+                JsonSerializer.setupOptions o.SerializerOptions |> ignore)
+            |> ignore
+
             for (setup, _) in features do
                 setup services |> ignore
 
         let configureApp (_: WebHostBuilderContext) (app: IApplicationBuilder) =
+
+            let env = app.ApplicationServices.GetService<IHostEnvironment> ()
+            if env.IsDevelopment () then
+                app.UseDeveloperExceptionPage () |> ignore
+
             for (_, setup) in features do
                 setup app |> ignore
 
         let configureWebHost (builder: IWebHostBuilder) =
             builder
-                .ConfigureLogging(fun loggingBuilder ->
-                    loggingBuilder.AddDebug().AddConsole() |> ignore)
                 .UseKestrel()
                 .ConfigureServices(configureServices)
                 .Configure(configureApp)
+            |> extendWebHost
             |> ignore
 
         HostBuilder()
             .ConfigureWebHost(Action<IWebHostBuilder> configureWebHost)
+
+    let addConsole (host: IHostBuilder) =
+        host.ConfigureLogging(fun b -> b.AddConsole() |> ignore)
+
+    let run (host: IHostBuilder) =
+        host.Build().Run()
+        0

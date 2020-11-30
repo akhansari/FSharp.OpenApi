@@ -1,22 +1,21 @@
 ﻿[<RequireQualifiedAccess>]
-module FalcoSwagger.ApiFeature
+module AspFeat.Features.Endpoint
 
+open System
 open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Routing
 open Microsoft.Extensions.DependencyInjection
 
 let addApi (services: IServiceCollection) =
     services
-        .AddHealthChecks().Services
         .AddResponseCompression()
         .AddRouting()
 
-let useApi (app: IApplicationBuilder) =
+let useApi configureEndpoints (app: IApplicationBuilder) =
     app
-        .UseDeveloperExceptionPage()
         .UseResponseCompression()
         .UseRouting()
-        .UseEndpoints(fun endpoints ->
-            endpoints.MapHealthChecks("/health") |> ignore)
+        .UseEndpoints(Action<IEndpointRouteBuilder> configureEndpoints)
 
-let getDefault =
-    (addApi, useApi)
+let featureWith configureEndpoints =
+    (addApi, useApi configureEndpoints)

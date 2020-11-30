@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <Compile Include="Tag.fs" />
+    <Compile Include="Operation.fs" />
+    <Compile Include="Schema.fs" />
+    <Compile Include="MediaType.fs" />
+    <Compile Include="Response.fs" />
+    <Compile Include="PathItem.fs" />
+    <Compile Include="Expressions.fs" />
+    <Compile Include="Factory.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.OpenApi" Version="1.2.3" />
+  </ItemGroup>
+
+</Project>

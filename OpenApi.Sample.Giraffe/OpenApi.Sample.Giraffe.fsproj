@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <PackageReference Include="Giraffe" Version="5.0.0-rc-2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="GiraffeOpenApi.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AspFeat\AspFeat.fsproj" />
+    <ProjectReference Include="..\OpenApi\OpenApi.fsproj" />
+  </ItemGroup>
+
+</Project>
