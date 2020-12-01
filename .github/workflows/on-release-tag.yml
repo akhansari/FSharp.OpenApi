@@ -42,5 +42,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{env.NUGET_PACKAGE_PATH}}
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Publish NuGet package
         run: dotnet nuget push ${{env.NUGET_PACKAGE_PATH}} --api-key ${{secrets.NUGET_TOKEN}} --force-english-output
