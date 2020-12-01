@@ -1,0 +1,46 @@
+name: On Release Tag
+
+on:
+  release:
+    types: [ published ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+    branches:
+      - master
+
+jobs:
+
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Setup environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+          source-url: https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Setup variables
+        run: |
+          echo "TAG_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
+          echo "PUBLISH_PATH=./publish" >> $GITHUB_ENV
+          echo "FSPROJ_PATH=./OpenApi/OpenApi.fsproj" >> $GITHUB_ENV
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore -p:Version=${{env.TAG_VERSION}} ${{env.FSPROJ_PATH}}
+      - name: Generate NuGet package
+        run: dotnet pack --configuration Release --no-build --no-restore -p:PackageVersion=${{env.TAG_VERSION}} ${{env.FSPROJ_PATH}} --output ${{env.PUBLISH_PATH}}
+      - name: Get NuGet package path
+        run: |
+          fileName=$(ls ${{env.PUBLISH_PATH}}/ | head -n 1)
+          echo "NUGET_PACKAGE_PATH=${{env.PUBLISH_PATH}}/${fileName}" >> $GITHUB_ENV
+      - name: Update NuGet package to release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{env.NUGET_PACKAGE_PATH}}
+      - name: Publish NuGet package
+        run: dotnet nuget push ${{env.NUGET_PACKAGE_PATH}} --api-key ${{secrets.NUGET_TOKEN}} --force-english-output
