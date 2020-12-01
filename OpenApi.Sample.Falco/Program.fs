@@ -25,7 +25,7 @@ let getProductsSpec endpoint =
         addResponse HttpStatusCode.OK
             (response {
                 description "Success"
-                jsonContent (v1Factory.makeJsonContent [ { Id = 0; Name = "name" } ])
+                jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
             })
         }
     |> FalcoOpenApi.addOperation v1Factory endpoint
@@ -33,7 +33,7 @@ let getProductsSpec endpoint =
 let endpoints =
     [
         get "/products" getProducts |> getProductsSpec
-        get v1Factory.SpecificationUrl (v1Factory.write Response.ofPlainText)
+        get v1Factory.SpecificationUrl (v1Factory.Write Response.ofPlainText)
     ]
 
 let useSwaggerUi (app: IApplicationBuilder) =

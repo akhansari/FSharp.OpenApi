@@ -23,7 +23,7 @@ let getProductsSpec endpoint =
         addResponse HttpStatusCode.OK
             (response {
                 description "Success"
-                jsonContent (v1Factory.makeJsonContent [ { Id = 0; Name = "name" } ])
+                jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
             })
         }
     |> GiraffeOpenApi.addOperation v1Factory endpoint
@@ -36,7 +36,7 @@ let getProducts : HttpHandler =
 let endpoints =
     [
         GET => route "/products" getProducts |> getProductsSpec
-        GET => route v1Factory.SpecificationUrl (v1Factory.write text)
+        GET => route v1Factory.SpecificationUrl (v1Factory.Write text)
     ]
 
 let addGiraffe (services: IServiceCollection) =

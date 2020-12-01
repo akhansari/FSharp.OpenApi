@@ -1,7 +1,6 @@
 ﻿namespace OpenApi
 
 open System.Text.Json
-open System.Threading.Tasks
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Extensions
@@ -14,21 +13,21 @@ type OpenApiFactory =
 
     member this.Version =
         this.Document.Info.Version
- 
+
     member this.SpecificationUrl =
         $"/api/specifications/{this.Document.Info.Version}"
 
-    member this.serialize () =
+    member this.Serialize () =
         this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
 
-    member this.makeJsonContent content =
+    member this.MakeJsonContent content =
         JsonSerializer.Serialize (content, this.JsonSerializerOptions)
         |> OpenApiString
 
-    member this.write (writer: string -> 'T) =
-        this.serialize () |> writer
+    member this.Write (writer: string -> 'T) =
+        this.Serialize () |> writer
 
-    member this.addOperation operationType path operation =
+    member this.AddOperation operationType path operation =
         let item = pathItem { addOperation operationType operation }
         this.Document.Paths.Add (path, item)
 

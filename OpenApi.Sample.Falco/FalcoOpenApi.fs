@@ -24,5 +24,5 @@ let toOperation = function
 
 let addOperation (factory: OpenApiFactory) (endpoint: HttpEndpoint) operation =
     let httpVerb = endpoint.Handlers |> List.head |> fst |> toOperation
-    factory.addOperation httpVerb endpoint.Pattern operation
+    factory.AddOperation httpVerb endpoint.Pattern operation
     endpoint
