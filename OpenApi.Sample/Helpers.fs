@@ -31,4 +31,4 @@ module Route =
 
     let mapWithSpec builder (factory: OpenApiFactory) httpVerb pattern handler operation =
         map builder httpVerb pattern handler
-        factory.addOperation httpVerb.OperationType pattern operation
+        factory.AddOperation httpVerb.OperationType pattern operation

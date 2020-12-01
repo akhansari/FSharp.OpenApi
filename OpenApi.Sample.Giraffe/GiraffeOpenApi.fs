@@ -25,5 +25,5 @@ let private endpointInfo (endpoint: Endpoint) =
 
 let addOperation (factory: OpenApiFactory) endpoint operation =
     let verb, path = endpointInfo endpoint
-    factory.addOperation verb path operation
+    factory.AddOperation verb path operation
     endpoint

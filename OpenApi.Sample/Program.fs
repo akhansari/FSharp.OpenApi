@@ -27,7 +27,7 @@ let configureEndpoints (builder: IEndpointRouteBuilder) =
             (response {
                 description "Success"
                 jsonContent
-                    (v1Factory.makeJsonContent [ Superhero
+                    (v1Factory.MakeJsonContent [ Superhero
                         { Name = "name"
                           Powers = [{ Kind = "kind" }] } ])
             })
@@ -36,7 +36,7 @@ let configureEndpoints (builder: IEndpointRouteBuilder) =
         Repo.getAll ()
         |> Response.writeAsJson ctx)
 
-    map Get v1Factory.SpecificationUrl (fun ctx -> v1Factory.write ctx.Response.WriteAsync)
+    map Get v1Factory.SpecificationUrl (fun ctx -> v1Factory.Write ctx.Response.WriteAsync)
 
 let useSwaggerUi (app: IApplicationBuilder) =
     app.UseSwaggerUI (fun options ->
