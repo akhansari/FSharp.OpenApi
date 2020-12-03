@@ -6,7 +6,7 @@ open Microsoft.OpenApi.Models
 type SchemaBuilder () =
 
     member _.Yield _ =
-        OpenApiOperation ()
+        OpenApiSchema ()
 
     [<CustomOperation "title">]
     member _.Title (state: OpenApiSchema, value) =
@@ -53,7 +53,6 @@ type SchemaBuilder () =
         state.MaxLength <- Nullable value
         state
 
-
     [<CustomOperation "minLength">]
     member _.MinLength (state: OpenApiSchema, value) =
         state.MinLength <- Nullable value
@@ -68,8 +67,6 @@ type SchemaBuilder () =
     member _.MultipleOf (state: OpenApiSchema, value) =
         state.MultipleOf <- Nullable value
         state
-
-    //TODO: Default
 
     [<CustomOperation "readOnly">]
     member _.ReadOnly (state: OpenApiSchema, value) =
@@ -112,7 +109,7 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "addProperty">]
-    member _.Property (state: OpenApiSchema, key, value) =
+    member _.Properties (state: OpenApiSchema, key, value) =
         state.Properties.Add (key, value)
         state
 

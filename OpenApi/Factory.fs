@@ -8,14 +8,14 @@ open Microsoft.OpenApi.Models
 open OpenApi.Expressions
 
 type OpenApiFactory =
-    { JsonSerializerOptions: JsonSerializerOptions
-      Document: OpenApiDocument }
+    { Document: OpenApiDocument
+      JsonSerializerOptions: JsonSerializerOptions }
 
     member this.Version =
         this.Document.Info.Version
 
     member this.SpecificationUrl =
-        $"/api/specifications/{this.Document.Info.Version}"
+        $"/api/specifications/{this.Version}"
 
     member this.Serialize () =
         this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
@@ -28,16 +28,17 @@ type OpenApiFactory =
         this.Serialize () |> writer
 
     member this.AddOperation operationType path operation =
-        let item = pathItem { addOperation operationType operation }
+        let item = apiPathItem { addOperation operationType operation }
         this.Document.Paths.Add (path, item)
 
 [<RequireQualifiedAccess>]
 module OpenApiFactory =
 
-    let create (jsonSerializerOptions: JsonSerializerOptions) title version =
+    let create (jsonSerializerOptions: JsonSerializerOptions) docTitle docVersion =
         jsonSerializerOptions.WriteIndented <- true
+        let document =
+            apiDocument {
+                info (apiInfo { title docTitle; version docVersion })
+            }
         { JsonSerializerOptions = jsonSerializerOptions
-          Document =
-            OpenApiDocument
-                ( Info = OpenApiInfo (Title = title, Version = version),
-                  Paths = OpenApiPaths () ) }
+          Document = document }

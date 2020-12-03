@@ -18,13 +18,13 @@ let configureEndpoints (builder: IEndpointRouteBuilder) =
     let mapWithSpec = Route.mapWithSpec builder v1Factory
     let map = Route.map builder
 
-    let superbeingTag = tag { name "Superbeing" }
+    let superbeingTag = apiTag { name "Superbeing" }
 
-    operation {
+    apiOperation {
         addTag superbeingTag
         summary "Get the list of superbeings."
         addResponse HttpStatusCode.OK
-            (response {
+            (apiResponse {
                 description "Success"
                 jsonContent
                     (v1Factory.MakeJsonContent [ Superhero
