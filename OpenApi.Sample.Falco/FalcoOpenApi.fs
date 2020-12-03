@@ -9,7 +9,7 @@ open OpenApi
 
 let featureWith endpoints =
     ( (fun (services: IServiceCollection) -> services.AddFalco ()),
-      (fun (app: IApplicationBuilder) -> app.UseFalco endpoints))
+      (fun (app: IApplicationBuilder) -> app.UseFalco endpoints) )
 
 let toOperation = function
     | GET     -> OperationType.Get

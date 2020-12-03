@@ -23,7 +23,7 @@ type TagBuilder () =
         state
 
     [<CustomOperation "addExtension">]
-    member _.Extension (state: OpenApiTag, key, value) =
+    member _.Extensions (state: OpenApiTag, key, value) =
         state.Extensions.Add (key, value)
         state
 

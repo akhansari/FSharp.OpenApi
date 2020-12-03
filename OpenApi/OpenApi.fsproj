@@ -12,12 +12,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Tag.fs" />
-    <Compile Include="Operation.fs" />
-    <Compile Include="Schema.fs" />
+    <Compile Include="Callback.fs" />
+    <Compile Include="Components.fs" />
+    <Compile Include="Contact.fs" />
+    <Compile Include="Discriminator.fs" />
+    <Compile Include="Document.fs" />
+    <Compile Include="Encoding.fs" />
+    <Compile Include="Example.fs" />
+    <Compile Include="ExternalDocs.fs" />
+    <Compile Include="Header.fs" />
+    <Compile Include="Info.fs" />
+    <Compile Include="License.fs" />
+    <Compile Include="Link.fs" />
     <Compile Include="MediaType.fs" />
-    <Compile Include="Response.fs" />
+    <Compile Include="OAuthFlow.fs" />
+    <Compile Include="OAuthFlows.fs" />
+    <Compile Include="Operation.fs" />
+    <Compile Include="Parameter.fs" />
     <Compile Include="PathItem.fs" />
+    <Compile Include="Reference.fs" />
+    <Compile Include="RequestBody.fs" />
+    <Compile Include="Response.fs" />
+    <Compile Include="Schema.fs" />
+    <Compile Include="SecurityRequirement.fs" />
+    <Compile Include="SecurityScheme.fs" />
+    <Compile Include="Server.fs" />
+    <Compile Include="ServerVariable.fs" />
+    <Compile Include="Tag.fs" />
     <Compile Include="Expressions.fs" />
     <Compile Include="Factory.fs" />
   </ItemGroup>

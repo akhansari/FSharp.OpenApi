@@ -17,11 +17,11 @@ let jsonOptions = AspFeat.JsonSerializer.createOptions ()
 let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
 
 let getProductsSpec endpoint =
-    operation {
-        addTag (tag { name "Products" })
+    apiOperation {
+        addTag (apiTag { name "Products" })
         summary "Get the list of products."
         addResponse HttpStatusCode.OK
-            (response {
+            (apiResponse {
                 description "Success"
                 jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
             })
