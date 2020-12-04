@@ -59,9 +59,9 @@ type SecuritySchemeBuilder () =
         state.BearerFormat <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiSecurityScheme, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiSecurityScheme, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

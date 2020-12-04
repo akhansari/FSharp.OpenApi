@@ -19,7 +19,7 @@ type LicenseBuilder () =
         state.Url <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiLicense, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiLicense, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

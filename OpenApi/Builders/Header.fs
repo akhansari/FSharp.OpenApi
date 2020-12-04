@@ -53,19 +53,19 @@ type HeaderBuilder () =
         state.Example <- value
         state
 
-    [<CustomOperation "addExample">]
-    member _.Examples (state: OpenApiHeader, key, value) =
-        state.Examples.Add (key, value)
+    [<CustomOperation "examples">]
+    member _.Examples (state: OpenApiHeader, value: KVs<string, 'T>) =
+        value |> List.iter state.Examples.Add
         state
 
-    [<CustomOperation "addContent">]
-    member _.Content (state: OpenApiHeader, key, value) =
-        state.Content.Add (key, value)
+    [<CustomOperation "content">]
+    member _.Content (state: OpenApiHeader, value: KVs<string, 'T>) =
+        value |> List.iter state.Content.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiHeader, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiHeader, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

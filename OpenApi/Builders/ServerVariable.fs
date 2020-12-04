@@ -17,12 +17,12 @@ type ServerVariableBuilder () =
         state.Default <- value
         state
 
-    [<CustomOperation "addEnum">]
-    member _.Enum (state: OpenApiServerVariable, value) =
-        state.Enum.Add value
+    [<CustomOperation "enums">]
+    member _.Enums (state: OpenApiServerVariable, value) =
+        List.iter state.Enum.Add value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiServerVariable, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiServerVariable, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

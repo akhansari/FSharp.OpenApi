@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample", "OpenApi.Sample\OpenApi.Sample.fsproj", "{9FDD231D-7225-4CA7-AEDF-8ACAAD4CFBA1}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample.Routing", "OpenApi.Sample.Routing\OpenApi.Sample.Routing.fsproj", "{9FDD231D-7225-4CA7-AEDF-8ACAAD4CFBA1}"
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi", "OpenApi\OpenApi.fsproj", "{9FF40C47-B88E-4F37-90E4-9FE3BB768901}"
 EndProject
@@ -16,7 +16,7 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "AspFeat", "AspFeat\AspFeat.
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample.Giraffe", "OpenApi.Sample.Giraffe\OpenApi.Sample.Giraffe.fsproj", "{912434AA-B6E7-4E02-A3B6-8177AB651C56}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpenApi.Sample.Falco", "OpenApi.Sample.Falco\OpenApi.Sample.Falco.fsproj", "{85E0390C-6D68-43A3-92BD-BDCF579791E4}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample.Falco", "OpenApi.Sample.Falco\OpenApi.Sample.Falco.fsproj", "{85E0390C-6D68-43A3-92BD-BDCF579791E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

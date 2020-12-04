@@ -30,10 +30,9 @@ module Asp =
             for (setup, _) in features do
                 setup services |> ignore
 
-        let configureApp (_: WebHostBuilderContext) (app: IApplicationBuilder) =
+        let configureApp (context: WebHostBuilderContext) (app: IApplicationBuilder) =
 
-            let env = app.ApplicationServices.GetService<IHostEnvironment> ()
-            if env.IsDevelopment () then
+            if context.HostingEnvironment.IsDevelopment () then
                 app.UseDeveloperExceptionPage () |> ignore
 
             for (_, setup) in features do

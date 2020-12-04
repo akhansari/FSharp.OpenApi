@@ -16,20 +16,20 @@ type ResponseBuilder () =
 
     /// Maps a header name to its definition. RFC7230 states header names are case insensitive.
     /// If a response header is defined with the name "Content-Type", it SHALL be ignored.
-    [<CustomOperation "addHeader">]
-    member _.Header (state: OpenApiResponse, value) =
-        state.Headers.Add value
+    [<CustomOperation "headers">]
+    member _.Headers (state: OpenApiResponse, value: KVs<string, 'T>) =
+        value |> List.iter state.Headers.Add
         state
 
     /// A map containing descriptions of potential response payloads.
     /// The key is a media type or media type range and the value describes it.
     /// For responses that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
-    [<CustomOperation "addContent">]
-    member _.Content (state: OpenApiResponse, key, value) =
-        state.Content.Add (key, value)
+    [<CustomOperation "content">]
+    member _.Content (state: OpenApiResponse, value: KVs<string, 'T>) =
+        value |> List.iter state.Content.Add
         state
 
-    /// Helper for a JSON content.
+    /// JSON content.
     [<CustomOperation "jsonContent">]
     member _.JsonContent (state: OpenApiResponse, example: OpenApiString) =
         let mediaType = OpenApiMediaType (Example = example)
@@ -38,14 +38,14 @@ type ResponseBuilder () =
 
     /// A map of operations links that can be followed from the response.
     /// The key of the map is a short name for the link, following the naming constraints of the names for Component Objects.
-    [<CustomOperation "addLink">]
-    member _.Links (state: OpenApiResponse, key, value) =
-        state.Links.Add (key, value)
+    [<CustomOperation "links">]
+    member _.Links (state: OpenApiResponse, value: KVs<string, 'T>) =
+        value |> List.iter state.Links.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiResponse, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiResponse, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]
@@ -63,7 +63,7 @@ type ResponsesBuilder () =
     member _.Yield _ =
         OpenApiResponses ()
 
-    [<CustomOperation "addResponse">]
-    member _.Responses (state: OpenApiResponses, key, value) =
-        state.Add (key, value)
+    [<CustomOperation "responses">]
+    member _.Responses (state: OpenApiResponses, value: KVs<string, 'T>) =
+        value |> List.iter state.Add
         state

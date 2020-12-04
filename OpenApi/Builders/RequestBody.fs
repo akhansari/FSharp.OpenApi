@@ -10,9 +10,9 @@ type RequestBodyBuilder () =
     /// REQUIRED. The content of the request body.
     /// The key is a media type or media type range and the value describes it.
     /// For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
-    [<CustomOperation "addContent">]
-    member _.Content (state: OpenApiRequestBody, key, value) =
-        state.Content.Add (key, value)
+    [<CustomOperation "content">]
+    member _.Content (state: OpenApiRequestBody, value: KVs<string, 'T>) =
+        value |> List.iter state.Content.Add
         state
 
     /// A brief description of the request body. This could contain examples of use. CommonMark syntax.
@@ -37,7 +37,7 @@ type RequestBodyBuilder () =
         state.Reference <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiRequestBody, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiRequestBody, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

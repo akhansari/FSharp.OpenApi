@@ -25,12 +25,12 @@ type ServerBuilder () =
 
     /// A map between a variable name and its value.
     /// The value is used for substitution in the server's URL template.
-    [<CustomOperation "addVariable">]
-    member _.Variables (state: OpenApiServer, key, value) =
-        state.Variables.Add (key, value)
+    [<CustomOperation "variables">]
+    member _.Variables (state: OpenApiServer, value: KVs<string, 'T>) =
+        value |> List.iter state.Variables.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiServer, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiServer, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

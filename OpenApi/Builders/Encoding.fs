@@ -23,9 +23,9 @@ type EncodingBuilder () =
     /// A map allowing additional information to be provided as headers, for example Content-Disposition.
     /// Content-Type is described separately and SHALL be ignored in this section.
     /// This property SHALL be ignored if the request body media type is not a multipart.
-    [<CustomOperation "addHeader">]
-    member _.Headers (state: OpenApiEncoding, key, value) =
-        state.Headers.Add (key, value)
+    [<CustomOperation "headers">]
+    member _.Headers (state: OpenApiEncoding, value: KVs<string, 'T>) =
+        value |> List.iter state.Headers.Add
         state
 
     /// Describes how a specific property value will be serialized depending on its type.
@@ -55,7 +55,7 @@ type EncodingBuilder () =
         state.AllowReserved <- Nullable value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiEncoding, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiEncoding, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

@@ -31,7 +31,7 @@ type OAuthFlowsBuilder () =
         state.AuthorizationCode <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiOAuthFlows, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiOAuthFlows, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

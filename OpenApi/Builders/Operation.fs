@@ -1,6 +1,5 @@
 ﻿namespace OpenApi.Builders
 
-open System.Net
 open Microsoft.OpenApi.Models
 
 type OperationBuilder () =
@@ -9,19 +8,16 @@ type OperationBuilder () =
         OpenApiOperation ()
 
     /// REQUIRED. The list of possible responses as they are returned from executing this operation.
-    [<CustomOperation "addResponse">]
-    member _.Responses (state: OpenApiOperation, (key: HttpStatusCode), value) =
-        state.Responses.Add (string key, value)
-        state
-    member _.Responses (state: OpenApiOperation, key, value) =
-        state.Responses.Add (key, value)
+    [<CustomOperation "responses">]
+    member _.Responses (state: OpenApiOperation, value: KVs<'TK, OpenApiResponse>) =
+        value |> List.iter (fun (k, v) -> state.Responses.Add (string k, v))
         state
 
     /// A list of tags for API documentation control.
     /// Tags can be used for logical grouping of operations by resources or any other qualifier.
-    [<CustomOperation "addTag">]
+    [<CustomOperation "tags">]
     member _.Tags (state: OpenApiOperation, value) =
-        state.Tags.Add value
+        List.iter state.Tags.Add value
         state
 
     /// A short summary of what the operation does.
@@ -58,9 +54,9 @@ type OperationBuilder () =
     /// The list MUST NOT include duplicated parameters.
     /// A unique parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
-    [<CustomOperation "addParameter">]
+    [<CustomOperation "parameters">]
     member _.Parameters (state: OpenApiOperation, value) =
-        state.Parameters.Add value
+        List.iter state.Parameters.Add value
         state
 
     /// The request body applicable for this operation.
@@ -75,9 +71,9 @@ type OperationBuilder () =
     /// The key is a unique identifier for the Callback Object.
     /// Each value in the map is a Callback Object that describes a request
     /// that may be initiated by the API provider and the expected responses.
-    [<CustomOperation "addCallback">]
-    member _.CallBack (state: OpenApiOperation, key, value) =
-        state.Callbacks.Add (key, value)
+    [<CustomOperation "callbacks">]
+    member _.CallBacks (state: OpenApiOperation, value: KVs<string, 'T>) =
+        value |> List.iter state.Callbacks.Add
         state
 
     /// Declares this operation to be deprecated. Consumers SHOULD refrain from usage of the declared operation.
@@ -93,20 +89,20 @@ type OperationBuilder () =
     /// To make security optional, an empty security requirement ({}) can be included in the array.
     /// This definition overrides any declared top-level security.
     /// To remove a top-level security declaration, an empty array can be used.
-    [<CustomOperation "addSecurity">]
+    [<CustomOperation "security">]
     member _.Security (state: OpenApiOperation, value) =
-        state.Security.Add value
+        value |> List.iter state.Security.Add
         state
 
     /// An alternative server array to service this operation.
     /// If an alternative server object is specified at the Path Item Object or Root level,
     /// it will be overridden by this value.
-    [<CustomOperation "addServer">]
+    [<CustomOperation "servers">]
     member _.Servers (state: OpenApiOperation, value) =
-        state.Servers.Add value
+        value |> List.iter state.Servers.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiOperation, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiOperation, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

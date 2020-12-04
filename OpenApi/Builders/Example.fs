@@ -35,9 +35,9 @@ type ExampleBuilder () =
         state.ExternalValue <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiExample, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiExample, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "reference">]
