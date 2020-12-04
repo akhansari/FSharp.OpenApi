@@ -18,13 +18,13 @@ let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
 
 let getProductsSpec endpoint =
     apiOperation {
-        addTag (apiTag { name "Products" })
+        tags [ apiTag { name "Products" } ]
         summary "Get the list of products."
-        addResponse HttpStatusCode.OK
-            (apiResponse {
+        responses [
+            HttpStatusCode.OK, apiResponse {
                 description "Success"
                 jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
-            })
+            } ]
         }
     |> GiraffeOpenApi.addOperation v1Factory endpoint
 

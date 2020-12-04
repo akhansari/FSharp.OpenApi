@@ -43,7 +43,7 @@ type InfoBuilder () =
         state.License <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiInfo, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiInfo, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

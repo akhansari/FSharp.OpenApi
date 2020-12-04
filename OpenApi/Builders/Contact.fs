@@ -25,7 +25,7 @@ type ContactBuilder () =
         state.Email <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiContact, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiContact, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

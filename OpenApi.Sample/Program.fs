@@ -21,16 +21,16 @@ let configureEndpoints (builder: IEndpointRouteBuilder) =
     let superbeingTag = apiTag { name "Superbeing" }
 
     apiOperation {
-        addTag superbeingTag
+        tags [ superbeingTag ]
         summary "Get the list of superbeings."
-        addResponse HttpStatusCode.OK
-            (apiResponse {
+        responses [
+            HttpStatusCode.OK, apiResponse {
                 description "Success"
                 jsonContent
                     (v1Factory.MakeJsonContent [ Superhero
                         { Name = "name"
                           Powers = [{ Kind = "kind" }] } ])
-            })
+            } ]
         }
     |> mapWithSpec Get "/api/v1/superbeings" (fun ctx ->
         Repo.getAll ()

@@ -20,15 +20,15 @@ type PathItemBuilder () =
         state
 
     /// A definition of a HTTP operation on this path.
-    [<CustomOperation "addOperation">]
-    member _.Operations (state: OpenApiPathItem, key, value) =
-        state.Operations.Add (key, value)
+    [<CustomOperation "operations">]
+    member _.Operations (state: OpenApiPathItem, value: KVs<OperationType, OpenApiOperation>) =
+        value |> List.iter state.Operations.Add
         state
 
     /// An alternative server array to service all operations in this path.
-    [<CustomOperation "addServer">]
+    [<CustomOperation "servers">]
     member _.Servers (state: OpenApiPathItem, value) =
-        state.Servers.Add value
+        value |> List.iter state.Servers.Add
         state
 
     /// A list of parameters that are applicable for all the operations described under this path.
@@ -36,14 +36,14 @@ type PathItemBuilder () =
     /// The list MUST NOT include duplicated parameters.
     /// A unique parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
-    [<CustomOperation "addParameter">]
+    [<CustomOperation "parameters">]
     member _.Parameters (state: OpenApiPathItem, value) =
-        state.Parameters.Add value
+        value |> List.iter state.Parameters.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiPathItem, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiPathItem, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
 type PathsBuilder () =
@@ -51,7 +51,7 @@ type PathsBuilder () =
     member _.Yield _ =
         OpenApiPaths ()
 
-    [<CustomOperation "addPathItem">]
-    member _.Extensions (state: OpenApiPaths, key, value) =
-        state.Add (key, value)
+    [<CustomOperation "pathItems">]
+    member _.PathItems (state: OpenApiPaths, value: KVs<string, 'T>) =
+        value |> List.iter state.Add
         state

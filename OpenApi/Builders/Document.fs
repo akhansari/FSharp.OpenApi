@@ -14,14 +14,14 @@ type DocumentBuilder () =
         state.Info <- value
         state
 
-    [<CustomOperation "addServer">]
+    [<CustomOperation "servers">]
     member _.Servers (state: OpenApiDocument, value) =
-        state.Servers.Add value
+        List.iter state.Servers.Add value
         state
 
     [<CustomOperation "paths">]
     member _.Paths (state: OpenApiDocument, value) =
-        state.Paths <- value
+        List.iter state.Paths.Add value
         state
 
     [<CustomOperation "components">]
@@ -29,14 +29,14 @@ type DocumentBuilder () =
         state.Components <- value
         state
 
-    [<CustomOperation "addSecurityRequirement">]
+    [<CustomOperation "securityRequirements">]
     member _.SecurityRequirements (state: OpenApiDocument, value) =
-        state.SecurityRequirements.Add value
+        List.iter state.SecurityRequirements.Add value
         state
 
-    [<CustomOperation "addTag">]
+    [<CustomOperation "tags">]
     member _.Tags (state: OpenApiDocument, value) =
-        state.Tags.Add value
+        List.iter state.Tags.Add value
         state
 
     [<CustomOperation "externalDocs">]
@@ -44,7 +44,7 @@ type DocumentBuilder () =
         state.ExternalDocs <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiDocument, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiDocument, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

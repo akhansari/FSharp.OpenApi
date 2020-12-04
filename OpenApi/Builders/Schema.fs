@@ -83,9 +83,9 @@ type SchemaBuilder () =
         state.Not <- value
         state
 
-    [<CustomOperation "addRequired">]
+    [<CustomOperation "required">]
     member _.Required (state: OpenApiSchema, value) =
-        state.Required.Add value |> ignore
+        List.map state.Required.Add value |> ignore
         state
 
     [<CustomOperation "Items">]
@@ -108,9 +108,9 @@ type SchemaBuilder () =
         state.UniqueItems <- value
         state
 
-    [<CustomOperation "addProperty">]
-    member _.Properties (state: OpenApiSchema, key, value) =
-        state.Properties.Add (key, value)
+    [<CustomOperation "properties">]
+    member _.Properties (state: OpenApiSchema, value: KVs<string, 'T>) =
+        value |> List.iter state.Properties.Add
         state
 
     [<CustomOperation "maxProperties">]
@@ -143,9 +143,9 @@ type SchemaBuilder () =
         state.Example <- value
         state
 
-    [<CustomOperation "addEnum">]
-    member _.Enum (state: OpenApiSchema, value) =
-        state.Enum.Add value
+    [<CustomOperation "enums">]
+    member _.Enums (state: OpenApiSchema, value) =
+        List.iter state.Enum.Add value
         state
 
     [<CustomOperation "nullable">]
@@ -163,9 +163,9 @@ type SchemaBuilder () =
         state.Xml <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extension (state: OpenApiSchema, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extension (state: OpenApiSchema, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

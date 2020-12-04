@@ -27,9 +27,9 @@ type LinkBuilder () =
     /// to be evaluated and passed to the linked operation.
     /// The parameter name can be qualified using the parameter location [{in}.]{name} for operations
     /// that use the same parameter name in different locations (e.g. path.id).
-    [<CustomOperation "addParameter">]
-    member _.Parameters (state: OpenApiLink, key, value) =
-        state.Parameters.Add (key, value)
+    [<CustomOperation "parameters">]
+    member _.Parameters (state: OpenApiLink, value: KVs<string, 'T>) =
+        value |> List.iter state.Parameters.Add
         state
 
     /// A literal value or {expression} to use as a request body when calling the target operation.
@@ -50,9 +50,9 @@ type LinkBuilder () =
         state.Server <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiLink, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiLink, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

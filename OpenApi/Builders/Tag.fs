@@ -22,9 +22,9 @@ type TagBuilder () =
         state.ExternalDocs <- value
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiTag, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiTag, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

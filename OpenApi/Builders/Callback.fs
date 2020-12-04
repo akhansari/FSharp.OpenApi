@@ -10,9 +10,9 @@ type CallbackBuilder () =
     /// Describes a set of requests that may be initiated by the API provider and the expected responses.
     /// The key value used to identify the path item object is an expression, evaluated at runtime,
     /// that identifies a URL to use for the callback operation.
-    [<CustomOperation "addPathItem">]
-    member _.PathItems (state: OpenApiCallback, key, value) =
-        state.PathItems.Add (key, value)
+    [<CustomOperation "pathItems">]
+    member _.PathItems (state: OpenApiCallback, value: KVs<'TK, 'TV>) =
+        value |> List.iter state.PathItems.Add
         state
 
     [<CustomOperation "unresolvedReference">]
@@ -26,7 +26,6 @@ type CallbackBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiCallback, key, value) =
-        state.Extensions.Add (key, value)
+    member _.Extensions (state: OpenApiCallback, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state
-

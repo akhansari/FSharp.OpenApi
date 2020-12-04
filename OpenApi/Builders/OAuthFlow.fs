@@ -27,12 +27,12 @@ type OAuthFlowBuilder () =
 
     /// The available scopes for the OAuth2 security scheme.
     /// A map between the scope name and a short description for it. The map MAY be empty.
-    [<CustomOperation "addScope">]
-    member _.Scopes (state: OpenApiOAuthFlow, key, value) =
-        state.Scopes.Add (key, value)
+    [<CustomOperation "scopes">]
+    member _.Scopes (state: OpenApiOAuthFlow, value: KVs<string, string>) =
+        value |> List.iter state.Scopes.Add
         state
 
-    [<CustomOperation "addExtension">]
-    member _.Extensions (state: OpenApiOAuthFlow, key, value) =
-        state.Extensions.Add (key, value)
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiOAuthFlow, value: KVs<string, 'T>) =
+        value |> List.iter state.Extensions.Add
         state

@@ -28,7 +28,7 @@ type OpenApiFactory =
         this.Serialize () |> writer
 
     member this.AddOperation operationType path operation =
-        let item = apiPathItem { addOperation operationType operation }
+        let item = apiPathItem { operations [ operationType, operation ] }
         this.Document.Paths.Add (path, item)
 
 [<RequireQualifiedAccess>]
