@@ -9,16 +9,26 @@ open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 open AspFeat
 
-type AspFeature =
+type Feat =
     ( (IServiceCollection -> IServiceCollection) *
       (IApplicationBuilder -> IApplicationBuilder) )
 
 [<RequireQualifiedAccess>]
-module Asp =
+module Host =
 
-    let createWebHost
+    let addConsole (host: IHostBuilder) =
+        host.ConfigureLogging(fun b -> b.AddConsole() |> ignore)
+
+    let run (host: IHostBuilder) =
+        host.Build().Run()
+        0
+
+[<RequireQualifiedAccess>]
+module WebHost =
+
+    let create
         (extendWebHost: IWebHostBuilder -> IWebHostBuilder)
-        (features: AspFeature list)
+        (feats: Feat list)
         =
 
         let configureServices (_: WebHostBuilderContext) (services: IServiceCollection) =
@@ -27,7 +37,7 @@ module Asp =
                 JsonSerializer.setupOptions o.SerializerOptions |> ignore)
             |> ignore
 
-            for (setup, _) in features do
+            for (setup, _) in feats do
                 setup services |> ignore
 
         let configureApp (context: WebHostBuilderContext) (app: IApplicationBuilder) =
@@ -35,7 +45,7 @@ module Asp =
             if context.HostingEnvironment.IsDevelopment () then
                 app.UseDeveloperExceptionPage () |> ignore
 
-            for (_, setup) in features do
+            for (_, setup) in feats do
                 setup app |> ignore
 
         let configureWebHost (builder: IWebHostBuilder) =
@@ -49,9 +59,7 @@ module Asp =
         HostBuilder()
             .ConfigureWebHost(Action<IWebHostBuilder> configureWebHost)
 
-    let addConsole (host: IHostBuilder) =
-        host.ConfigureLogging(fun b -> b.AddConsole() |> ignore)
-
-    let run (host: IHostBuilder) =
-        host.Build().Run()
-        0
+    let run feats =
+        create id feats
+        |> Host.addConsole
+        |> Host.run

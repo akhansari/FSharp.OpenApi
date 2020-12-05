@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "OpenApi.Sample": {
+    "OpenApi.Sample.Routing": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

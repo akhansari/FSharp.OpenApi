@@ -3,13 +3,12 @@ module Program
 open System.Net
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
-open AspFeat.Builder
-open AspFeat.Features
 open Giraffe
 open Giraffe.EndpointRouting
 open Giraffe.Serialization
 open OpenApi
 open OpenApi.Expressions
+open AspFeat.Builder
 
 type Product = { Id: int32; Name: string }
 
@@ -50,8 +49,6 @@ let useSwaggerUi (app: IApplicationBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    [ Endpoint.featureWith (fun b -> b.MapGiraffeEndpoints endpoints)
+    [ Endpoints.featWith (fun b -> b.MapGiraffeEndpoints endpoints)
       (addGiraffe, useSwaggerUi) ]
-    |> Asp.createWebHost id
-    |> Asp.addConsole
-    |> Asp.run
+    |> WebHost.run

@@ -42,8 +42,6 @@ let useSwaggerUi (app: IApplicationBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    [ FalcoOpenApi.featureWith endpoints
+    [ FalcoOpenApi.featWith endpoints
       (id, useSwaggerUi) ]
-    |> Asp.createWebHost id
-    |> Asp.addConsole
-    |> Asp.run
+    |> WebHost.run

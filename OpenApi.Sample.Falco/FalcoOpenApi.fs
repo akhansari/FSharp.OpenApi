@@ -7,7 +7,7 @@ open Microsoft.OpenApi.Models
 open Falco
 open OpenApi
 
-let featureWith endpoints =
+let featWith endpoints =
     ( (fun (services: IServiceCollection) -> services.AddFalco ()),
       (fun (app: IApplicationBuilder) -> app.UseFalco endpoints) )
 

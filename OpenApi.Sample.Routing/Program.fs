@@ -8,7 +8,6 @@ open OpenApi
 open OpenApi.Expressions
 open Sample
 open AspFeat.Builder
-open AspFeat.Features
 
 let v1Factory =
     OpenApiFactory.create (AspFeat.JsonSerializer.createOptions ())
@@ -44,8 +43,6 @@ let useSwaggerUi (app: IApplicationBuilder) =
 
 [<EntryPoint>]
 let main _ =
-    [ Endpoint.featureWith configureEndpoints
+    [ Endpoints.featWith configureEndpoints
       (id, useSwaggerUi) ]
-    |> Asp.createWebHost id
-    |> Asp.addConsole
-    |> Asp.run
+    |> WebHost.run
