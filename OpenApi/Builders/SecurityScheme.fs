@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type SecuritySchemeBuilder () =
@@ -8,7 +9,7 @@ type SecuritySchemeBuilder () =
         OpenApiSecurityScheme ()
 
     /// REQUIRED. The type of the security scheme. Valid values are "apiKey", "http", "oauth2", "openIdConnect".
-    [<CustomOperation "type">]
+    [<CustomOperation "securityType">]
     member _.Type (state: OpenApiSecurityScheme, value) =
         state.Type <- value
         state
@@ -20,7 +21,7 @@ type SecuritySchemeBuilder () =
         state
 
     /// REQUIRED. The location of the API key. Valid values are "query", "header" or "cookie".
-    [<CustomOperation "in">]
+    [<CustomOperation "location">]
     member _.In (state: OpenApiSecurityScheme, value) =
         state.In <- value
         state
@@ -60,8 +61,8 @@ type SecuritySchemeBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiSecurityScheme, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiSecurityScheme, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

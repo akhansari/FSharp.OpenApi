@@ -1,5 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
+open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
 
 type RequestBodyBuilder () =
@@ -11,8 +13,15 @@ type RequestBodyBuilder () =
     /// The key is a media type or media type range and the value describes it.
     /// For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
     [<CustomOperation "content">]
-    member _.Content (state: OpenApiRequestBody, value: KVs<string, 'T>) =
-        value |> List.iter state.Content.Add
+    member _.Content (state: OpenApiRequestBody, value: KVs<_, OpenApiMediaType>) =
+        value |> Seq.iter state.Content.Add
+        state
+
+    /// JSON content.
+    [<CustomOperation "jsonContent">]
+    member _.JsonContent (state: OpenApiRequestBody, example: OpenApiString) =
+        let mediaType = OpenApiMediaType (Example = example, Schema = OpenApiSchema ())
+        state.Content.Add (MediaTypes.Json, mediaType)
         state
 
     /// A brief description of the request body. This could contain examples of use. CommonMark syntax.
@@ -38,6 +47,6 @@ type RequestBodyBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiRequestBody, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiRequestBody, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

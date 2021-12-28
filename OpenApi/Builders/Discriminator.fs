@@ -15,6 +15,6 @@ type DiscriminatorBuilder () =
 
     /// An object to hold mappings between payload values and schema names or references.
     [<CustomOperation "mapping">]
-    member _.Mapping (state: OpenApiDiscriminator, value: KVs<string, string>) =
-        value |> List.iter state.Mapping.Add
+    member _.Mapping (state: OpenApiDiscriminator, value: KVs<_, string>) =
+        value |> Seq.iter state.Mapping.Add
         state

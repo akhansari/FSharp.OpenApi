@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module OpenApi.Expressions
 
 open OpenApi.Builders

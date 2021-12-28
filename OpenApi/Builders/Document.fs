@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type DocumentBuilder () =
@@ -16,12 +17,12 @@ type DocumentBuilder () =
 
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiDocument, value) =
-        List.iter state.Servers.Add value
+        Seq.iter state.Servers.Add value
         state
 
     [<CustomOperation "paths">]
     member _.Paths (state: OpenApiDocument, value) =
-        List.iter state.Paths.Add value
+        Seq.iter state.Paths.Add value
         state
 
     [<CustomOperation "components">]
@@ -31,12 +32,12 @@ type DocumentBuilder () =
 
     [<CustomOperation "securityRequirements">]
     member _.SecurityRequirements (state: OpenApiDocument, value) =
-        List.iter state.SecurityRequirements.Add value
+        Seq.iter state.SecurityRequirements.Add value
         state
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiDocument, value) =
-        List.iter state.Tags.Add value
+        Seq.iter state.Tags.Add value
         state
 
     [<CustomOperation "externalDocs">]
@@ -45,6 +46,6 @@ type DocumentBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiDocument, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiDocument, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

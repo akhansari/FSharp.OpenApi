@@ -1,6 +1,7 @@
 ﻿namespace OpenApi.Builders
 
 open System
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type HeaderBuilder () =
@@ -54,18 +55,18 @@ type HeaderBuilder () =
         state
 
     [<CustomOperation "examples">]
-    member _.Examples (state: OpenApiHeader, value: KVs<string, 'T>) =
-        value |> List.iter state.Examples.Add
+    member _.Examples (state: OpenApiHeader, value: KVs<_, OpenApiExample>) =
+        value |> Seq.iter state.Examples.Add
         state
 
     [<CustomOperation "content">]
-    member _.Content (state: OpenApiHeader, value: KVs<string, 'T>) =
-        value |> List.iter state.Content.Add
+    member _.Content (state: OpenApiHeader, value: KVs<_, OpenApiMediaType>) =
+        value |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiHeader, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiHeader, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

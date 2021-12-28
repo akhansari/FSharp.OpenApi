@@ -1,5 +1,6 @@
 ﻿namespace OpenApi
 
+open System
 open System.Text.Json
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Any
@@ -7,6 +8,7 @@ open Microsoft.OpenApi.Extensions
 open Microsoft.OpenApi.Models
 open OpenApi.Expressions
 
+[<NoComparison>]
 type OpenApiFactory =
     { Document: OpenApiDocument
       JsonSerializerOptions: JsonSerializerOptions }
@@ -15,7 +17,9 @@ type OpenApiFactory =
         this.Document.Info.Version
 
     member this.SpecificationUrl =
-        $"/api/specifications/{this.Version}"
+        if String.IsNullOrWhiteSpace this.Version
+        then "/swagger.json"
+        else $"/swagger/{this.Version}/swagger.json"
 
     member this.Serialize () =
         this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
@@ -28,8 +32,11 @@ type OpenApiFactory =
         this.Serialize () |> writer
 
     member this.AddOperation operationType path operation =
-        let item = apiPathItem { operations [ operationType, operation ] }
-        this.Document.Paths.Add (path, item)
+        if this.Document.Paths.ContainsKey path then
+            this.Document.Paths.[path].Operations.Add (operationType, operation)
+        else
+            let item = apiPathItem { operations [ operationType, operation ] }
+            this.Document.Paths.Add (path, item)
 
 [<RequireQualifiedAccess>]
 module OpenApiFactory =
