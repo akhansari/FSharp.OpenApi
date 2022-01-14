@@ -1,54 +1,74 @@
 module Program
 
 open System.Net
+open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
+open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.OpenApi.Models
 open Giraffe
-open Giraffe.EndpointRouting
-open Giraffe.Serialization
 open OpenApi
-open OpenApi.Expressions
-open AspFeat.Builder
 
 type Product = { Id: int32; Name: string }
 
-let jsonOptions = AspFeat.JsonSerializer.createOptions ()
-let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
+type SpecFactory (jsonOptions) =
 
-let getProductsSpec endpoint =
-    apiOperation {
-        tags [ apiTag { name "Products" } ]
-        summary "Get the list of products."
-        responses [
-            HttpStatusCode.OK, apiResponse {
-                description "Success"
-                jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
-            } ]
-        }
-    |> GiraffeOpenApi.addOperation v1Factory endpoint
+    let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
+
+    let addOperation (factory: OpenApiFactory) verb path operation =
+        factory.AddOperation verb path operation
+        path
+
+    member _.V1 = v1Factory
+
+    member _.GetProducts path =
+        apiOperation {
+            tags [ apiTag { name "Products" } ]
+            summary "Get the list of products."
+            responses [
+                HttpStatusCode.OK, apiResponse {
+                    description "Success"
+                    jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
+                } ]
+            }
+        |> addOperation v1Factory OperationType.Get path
 
 let getProducts : HttpHandler =
     fun _ ctx ->
         [ { Id = 1; Name = "Cat Food" } ]
         |> ctx.WriteJsonAsync
 
-let endpoints =
-    [
-        GET => route "/products" getProducts |> getProductsSpec
-        GET => route v1Factory.SpecificationUrl (v1Factory.Write text)
-    ]
-
-let addGiraffe (services: IServiceCollection) =
-    services
-        .AddGiraffe()
-        .AddSingleton<IJsonSerializer>(SystemTextJsonSerializer jsonOptions)
-
-let useSwaggerUi (app: IApplicationBuilder) =
-    app.UseSwaggerUI(fun options ->
-        options.SwaggerEndpoint(v1Factory.SpecificationUrl, v1Factory.Version))
-
 [<EntryPoint>]
-let main _ =
-    [ Endpoints.featWith (fun b -> b.MapGiraffeEndpoints endpoints)
-      (addGiraffe, useSwaggerUi) ]
-    |> WebHost.run
+let main args =
+
+    let jsonOptions = System.Text.Json.JsonSerializerOptions ()
+    let spec = SpecFactory jsonOptions
+
+    let webApp =
+        choose [
+            GET >=> choose [
+                route (spec.GetProducts "/products") >=> getProducts
+                route spec.V1.SpecificationUrl >=> (spec.V1.Write text)
+            ]
+        ]
+
+    let addGiraffe (services: IServiceCollection) =
+        services
+            .AddGiraffe()
+            .AddSingleton<Json.ISerializer>(SystemTextJson.Serializer jsonOptions)
+        |> ignore
+
+    let useSwaggerUi (app: IApplicationBuilder) =
+        app
+            .UseSwaggerUI(fun o -> o.SwaggerEndpoint(spec.V1.SpecificationUrl, spec.V1.Version))
+            .UseGiraffe(webApp)
+        |> ignore
+
+    WebHost
+        .CreateDefaultBuilder(args)
+        .UseKestrel()
+        .ConfigureServices(addGiraffe)
+        .Configure(useSwaggerUi)
+        .Build()
+        .Run()
+    0

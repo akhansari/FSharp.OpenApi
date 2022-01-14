@@ -1,15 +1,9 @@
 ﻿module FalcoOpenApi
 
 open System
-open Microsoft.AspNetCore.Builder
-open Microsoft.Extensions.DependencyInjection
 open Microsoft.OpenApi.Models
 open Falco
 open OpenApi
-
-let featWith endpoints =
-    ( (fun (services: IServiceCollection) -> services.AddFalco ()),
-      (fun (app: IApplicationBuilder) -> app.UseFalco endpoints) )
 
 let toOperation = function
     | GET     -> OperationType.Get
