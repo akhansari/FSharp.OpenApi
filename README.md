@@ -1,5 +1,5 @@
 
-## FSharp OpenAPI
+## FSharp OpenAPI [![NuGet Status](https://img.shields.io/nuget/v/FSharp.OpenApi.svg)](https://www.nuget.org/packages/FSharp.OpenApi)
 
 F# Wrapper for Microsoft.OpenApi.
 
