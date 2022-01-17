@@ -28,7 +28,7 @@ jobs:
           echo "PUBLISH_PATH=./publish" >> $GITHUB_ENV
           echo "FSPROJ_PATH=./OpenApi/OpenApi.fsproj" >> $GITHUB_ENV
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore ${{env.FSPROJ_PATH}}
       - name: Build
         run: dotnet build --configuration Release --no-restore -p:Version=${{env.TAG_VERSION}} ${{env.FSPROJ_PATH}}
       - name: Generate NuGet package
