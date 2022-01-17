@@ -12,7 +12,7 @@ type ReferenceBuilder () =
         state.ExternalResource <- value
         state
 
-    [<CustomOperation "type">]
+    [<CustomOperation "referenceType">]
     member _.Type (state: OpenApiReference, value) =
         state.Type <- value
         state

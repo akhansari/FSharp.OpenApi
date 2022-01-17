@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type PathItemBuilder () =
@@ -21,14 +22,14 @@ type PathItemBuilder () =
 
     /// A definition of a HTTP operation on this path.
     [<CustomOperation "operations">]
-    member _.Operations (state: OpenApiPathItem, value: KVs<OperationType, OpenApiOperation>) =
-        value |> List.iter state.Operations.Add
+    member _.Operations (state: OpenApiPathItem, value: KVs<_, OpenApiOperation>) =
+        value |> Seq.iter state.Operations.Add
         state
 
     /// An alternative server array to service all operations in this path.
     [<CustomOperation "servers">]
-    member _.Servers (state: OpenApiPathItem, value) =
-        value |> List.iter state.Servers.Add
+    member _.Servers (state: OpenApiPathItem, value: OpenApiServer seq) =
+        value |> Seq.iter state.Servers.Add
         state
 
     /// A list of parameters that are applicable for all the operations described under this path.
@@ -37,13 +38,13 @@ type PathItemBuilder () =
     /// A unique parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
     [<CustomOperation "parameters">]
-    member _.Parameters (state: OpenApiPathItem, value) =
-        value |> List.iter state.Parameters.Add
+    member _.Parameters (state: OpenApiPathItem, value: OpenApiParameter seq) =
+        value |> Seq.iter state.Parameters.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiPathItem, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiPathItem, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
 type PathsBuilder () =
@@ -52,6 +53,6 @@ type PathsBuilder () =
         OpenApiPaths ()
 
     [<CustomOperation "pathItems">]
-    member _.PathItems (state: OpenApiPaths, value: KVs<string, 'T>) =
-        value |> List.iter state.Add
+    member _.PathItems (state: OpenApiPaths, value: KVs<_, OpenApiPathItem>) =
+        value |> Seq.iter state.Add
         state

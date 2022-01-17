@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type InfoBuilder () =
@@ -44,6 +45,6 @@ type InfoBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiInfo, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiInfo, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

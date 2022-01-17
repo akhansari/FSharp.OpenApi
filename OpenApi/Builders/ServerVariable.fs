@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type ServerVariableBuilder () =
@@ -19,10 +20,10 @@ type ServerVariableBuilder () =
 
     [<CustomOperation "enums">]
     member _.Enums (state: OpenApiServerVariable, value) =
-        List.iter state.Enum.Add value
+        Seq.iter state.Enum.Add value
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiServerVariable, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiServerVariable, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

@@ -1,6 +1,8 @@
 namespace OpenApi.Builders
 
 open System
+open Microsoft.OpenApi
+open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
 
 type SchemaBuilder () =
@@ -13,7 +15,7 @@ type SchemaBuilder () =
         state.Title <- value
         state
 
-    [<CustomOperation "type">]
+    [<CustomOperation "schemaType">]
     member _.Type (state: OpenApiSchema, value) =
         state.Type <- value
         state
@@ -78,14 +80,14 @@ type SchemaBuilder () =
         state.WriteOnly <- value
         state
 
-    [<CustomOperation "not">]
+    [<CustomOperation "notEqual">]
     member _.Not (state: OpenApiSchema, value) =
         state.Not <- value
         state
 
     [<CustomOperation "required">]
     member _.Required (state: OpenApiSchema, value) =
-        List.map state.Required.Add value |> ignore
+        Seq.map state.Required.Add value |> ignore
         state
 
     [<CustomOperation "Items">]
@@ -109,8 +111,8 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "properties">]
-    member _.Properties (state: OpenApiSchema, value: KVs<string, 'T>) =
-        value |> List.iter state.Properties.Add
+    member _.Properties (state: OpenApiSchema, value: KVs<_, OpenApiSchema>) =
+        value |> Seq.iter state.Properties.Add
         state
 
     [<CustomOperation "maxProperties">]
@@ -144,8 +146,8 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "enums">]
-    member _.Enums (state: OpenApiSchema, value) =
-        List.iter state.Enum.Add value
+    member _.Enums (state: OpenApiSchema, value: IOpenApiAny seq) =
+        Seq.iter state.Enum.Add value
         state
 
     [<CustomOperation "nullable">]
@@ -164,8 +166,8 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extension (state: OpenApiSchema, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extension (state: OpenApiSchema, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

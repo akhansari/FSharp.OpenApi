@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type MediaTypeBuilder () =
@@ -24,19 +25,19 @@ type MediaTypeBuilder () =
 
     /// Examples of the media type.
     [<CustomOperation "examples">]
-    member _.Examples (state: OpenApiMediaType, value: KVs<string, 'T>) =
-        value |> List.iter state.Examples.Add
+    member _.Examples (state: OpenApiMediaType, value: KVs<_, OpenApiExample>) =
+        value |> Seq.iter state.Examples.Add
         state
 
     /// A map between a property name and its encoding information.
     /// The key, being the property name, MUST exist in the schema as a property.
     /// The encoding object SHALL only apply to requestBody objects when the media type is multipart or application/x-www-form-urlencoded.
     [<CustomOperation "encoding">]
-    member _.Encoding (state: OpenApiMediaType, value: KVs<string, 'T>) =
-        value |> List.iter state.Encoding.Add
+    member _.Encoding (state: OpenApiMediaType, value: KVs<_, OpenApiEncoding>) =
+        value |> Seq.iter state.Encoding.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiMediaType, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiMediaType, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

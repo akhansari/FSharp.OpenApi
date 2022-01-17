@@ -8,6 +8,6 @@ type SecurityRequirementBuilder () =
         OpenApiSecurityRequirement ()
 
     [<CustomOperation "securityRequirements">]
-    member _.SecurityRequirements (state: OpenApiSecurityRequirement, value: KVs<OpenApiSecurityScheme, string list>) =
-        value |> List.iter (fun (k, v) -> state.Add (k, ResizeArray v))
+    member _.SecurityRequirements (state: OpenApiSecurityRequirement, value: KVs<OpenApiSecurityScheme, string seq>) =
+        value |> Seq.iter (fun (k, v) -> state.Add (k, ResizeArray v))
         state

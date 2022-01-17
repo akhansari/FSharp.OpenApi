@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type LinkBuilder () =
@@ -28,8 +29,8 @@ type LinkBuilder () =
     /// The parameter name can be qualified using the parameter location [{in}.]{name} for operations
     /// that use the same parameter name in different locations (e.g. path.id).
     [<CustomOperation "parameters">]
-    member _.Parameters (state: OpenApiLink, value: KVs<string, 'T>) =
-        value |> List.iter state.Parameters.Add
+    member _.Parameters (state: OpenApiLink, value: KVs<_, RuntimeExpressionAnyWrapper>) =
+        value |> Seq.iter state.Parameters.Add
         state
 
     /// A literal value or {expression} to use as a request body when calling the target operation.
@@ -51,8 +52,8 @@ type LinkBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiLink, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiLink, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

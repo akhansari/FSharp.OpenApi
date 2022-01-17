@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type OAuthFlowBuilder () =
@@ -29,10 +30,10 @@ type OAuthFlowBuilder () =
     /// A map between the scope name and a short description for it. The map MAY be empty.
     [<CustomOperation "scopes">]
     member _.Scopes (state: OpenApiOAuthFlow, value: KVs<string, string>) =
-        value |> List.iter state.Scopes.Add
+        value |> Seq.iter state.Scopes.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiOAuthFlow, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiOAuthFlow, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state

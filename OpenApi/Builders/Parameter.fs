@@ -1,6 +1,7 @@
 ﻿namespace OpenApi.Builders
 
 open System
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type ParameterBuilder () =
@@ -18,7 +19,7 @@ type ParameterBuilder () =
         state
 
     /// REQUIRED. The location of the parameter. Possible values are "query", "header", "path" or "cookie".
-    [<CustomOperation "in">]
+    [<CustomOperation "location">]
     member _.In (state: OpenApiParameter, value) =
         state.In <- Nullable value
         state
@@ -86,8 +87,8 @@ type ParameterBuilder () =
 
     /// Examples of the parameter's potential value.
     [<CustomOperation "examples">]
-    member _.Examples (state: OpenApiParameter, value: KVs<string, 'T>) =
-        value |> List.iter state.Examples.Add
+    member _.Examples (state: OpenApiParameter, value: KVs<_, OpenApiExample>) =
+        value |> Seq.iter state.Examples.Add
         state
 
     /// Example of the parameter's potential value.
@@ -107,12 +108,12 @@ type ParameterBuilder () =
     /// The map MUST only contain one entry.
     [<CustomOperation "content">]
     member _.Content (state: OpenApiParameter, value: KVs<string, 'T>) =
-        value |> List.iter state.Content.Add
+        value |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiParameter, value: KVs<string, 'T>) =
-        value |> List.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiParameter, value: KVs<_, Interfaces.IOpenApiExtension>) =
+        value |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "unresolvedReference">]

@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
     <PackageId>FSharp.OpenApi</PackageId>
     <Authors>Amin Khansari</Authors>
-    <Version>0.1.0</Version>
     <RepositoryUrl>https://github.com/akhansari/FSharp.OpenApi</RepositoryUrl>
     <PackageDescription>F# Wrapper for Microsoft.OpenApi</PackageDescription>
     <PackageTags>fsharp, openapi, swagger</PackageTags>
