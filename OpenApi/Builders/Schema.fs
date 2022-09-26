@@ -87,7 +87,7 @@ type SchemaBuilder () =
 
     [<CustomOperation "required">]
     member _.Required (state: OpenApiSchema, value) =
-        Seq.map state.Required.Add value |> ignore
+        value |> Seq.iter (fun v -> state.Required.Add v |> ignore)
         state
 
     [<CustomOperation "Items">]
