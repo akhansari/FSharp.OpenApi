@@ -180,7 +180,7 @@ type SchemaBuilder () =
         state.Reference <- value
         state
 
-    [<CustomOperation "default">]
+    [<CustomOperation "defaultValue">]
     member _.Default (state: OpenApiSchema, value) =
         state.Default <- value
         state
