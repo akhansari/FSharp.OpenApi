@@ -3,6 +3,7 @@ namespace OpenApi.Builders
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
+open System.Text.Json.Nodes
 
 type ResponseBuilder () =
 
@@ -32,7 +33,7 @@ type ResponseBuilder () =
 
     /// JSON content.
     [<CustomOperation "jsonContent">]
-    member _.JsonContent (state: OpenApiResponse, example: OpenApiString) =
+    member _.JsonContent (state: OpenApiResponse, example: JsonNode) =
         let mediaType = OpenApiMediaType (Example = example)
         state.Content.Add (MediaTypes.Json, mediaType)
         state

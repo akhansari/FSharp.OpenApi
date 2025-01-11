@@ -4,6 +4,7 @@ open System
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
+open System.Text.Json.Nodes
 
 type SchemaBuilder () =
 
@@ -146,7 +147,7 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "enums">]
-    member _.Enums (state: OpenApiSchema, value: IOpenApiAny seq) =
+    member _.Enums (state: OpenApiSchema, value: JsonNode seq) =
         Seq.iter state.Enum.Add value
         state
 

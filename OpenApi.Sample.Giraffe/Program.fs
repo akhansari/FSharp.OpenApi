@@ -55,7 +55,6 @@ let main args =
     let addGiraffe (services: IServiceCollection) =
         services
             .AddGiraffe()
-            .AddSingleton<Json.ISerializer>(SystemTextJson.Serializer jsonOptions)
         |> ignore
 
     let useSwaggerUi (app: IApplicationBuilder) =

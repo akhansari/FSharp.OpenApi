@@ -22,11 +22,10 @@ type OpenApiFactory =
         else $"/swagger/{this.Version}/swagger.json"
 
     member this.Serialize () =
-        this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
+        this.Document.Serialize (OpenApiSpecVersion.OpenApi3_1, OpenApiFormat.Json)
 
     member this.MakeJsonContent content =
         JsonSerializer.Serialize (content, this.JsonSerializerOptions)
-        |> OpenApiString
 
     member this.Write (writer: string -> 'T) =
         this.Serialize () |> writer

@@ -3,6 +3,7 @@
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
+open System.Text.Json.Nodes
 
 type RequestBodyBuilder () =
 
@@ -19,7 +20,7 @@ type RequestBodyBuilder () =
 
     /// JSON content.
     [<CustomOperation "jsonContent">]
-    member _.JsonContent (state: OpenApiRequestBody, example: OpenApiString) =
+    member _.JsonContent (state: OpenApiRequestBody, example: JsonNode) =
         let mediaType = OpenApiMediaType (Example = example, Schema = OpenApiSchema ())
         state.Content.Add (MediaTypes.Json, mediaType)
         state

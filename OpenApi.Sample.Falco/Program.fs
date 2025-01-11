@@ -11,8 +11,13 @@ type Product =
     { Id: int32; Name: string }
 
 type SpecFactory () =
+    let jsonOptions = 
+        System.Text.Json.JsonSerializerOptions(
+            PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        )
 
-    let v1Factory = OpenApiFactory.create Constants.defaultJsonOptions "Products API" "v1"
+    let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
 
     member _.V1 = v1Factory
 
