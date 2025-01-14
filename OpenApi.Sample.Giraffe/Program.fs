@@ -6,14 +6,16 @@ open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.OpenApi.Models
+open Scalar.AspNetCore
 open Giraffe
 open OpenApi
 
 type Product = { Id: int32; Name: string }
 
-type SpecFactory (jsonOptions) =
+type SpecFactory () =
 
-    let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
+    let v1Factory =
+        OpenApiFactory.create Json.FsharpFriendlySerializer.DefaultOptions "Products API" "v1"
 
     let addOperation (factory: OpenApiFactory) verb path operation =
         factory.AddOperation verb path operation
@@ -41,8 +43,7 @@ let getProducts : HttpHandler =
 [<EntryPoint>]
 let main args =
 
-    let jsonOptions = System.Text.Json.JsonSerializerOptions ()
-    let spec = SpecFactory jsonOptions
+    let spec = SpecFactory ()
 
     let webApp =
         choose [
@@ -55,12 +56,12 @@ let main args =
     let addGiraffe (services: IServiceCollection) =
         services
             .AddGiraffe()
-            .AddSingleton<Json.ISerializer>(SystemTextJson.Serializer jsonOptions)
         |> ignore
 
-    let useSwaggerUi (app: IApplicationBuilder) =
+    let configureApp (app: IApplicationBuilder) =
         app
-            .UseSwaggerUI(fun o -> o.SwaggerEndpoint(spec.V1.SpecificationUrl, spec.V1.Version))
+            .UseRouting()
+            .UseEndpoints(fun e -> e.MapScalarApiReference() |> ignore)
             .UseGiraffe(webApp)
         |> ignore
 
@@ -68,7 +69,7 @@ let main args =
         .CreateDefaultBuilder(args)
         .UseKestrel()
         .ConfigureServices(addGiraffe)
-        .Configure(useSwaggerUi)
+        .Configure(configureApp)
         .Build()
         .Run()
     0

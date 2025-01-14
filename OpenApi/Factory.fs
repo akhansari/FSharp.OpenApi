@@ -18,8 +18,8 @@ type OpenApiFactory =
 
     member this.SpecificationUrl =
         if String.IsNullOrWhiteSpace this.Version
-        then "/swagger.json"
-        else $"/swagger/{this.Version}/swagger.json"
+        then "/openapi/v1.json"
+        else $"/openapi/{this.Version}.json"
 
     member this.Serialize () =
         this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
@@ -33,7 +33,7 @@ type OpenApiFactory =
 
     member this.AddOperation operationType path operation =
         if this.Document.Paths.ContainsKey path then
-            this.Document.Paths.[path].Operations.Add (operationType, operation)
+            this.Document.Paths[path].Operations.Add (operationType, operation)
         else
             let item = apiPathItem { operations [ operationType, operation ] }
             this.Document.Paths.Add (path, item)

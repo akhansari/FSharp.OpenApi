@@ -6,6 +6,7 @@ open System.Text.Json
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
 open Microsoft.OpenApi.Models
+open Scalar.AspNetCore
 open OpenApi
 
 type SpecFactory () =
@@ -84,7 +85,7 @@ let main args =
 
     let spec = SpecFactory ()
 
-    app.UseSwaggerUI(fun o -> o.SwaggerEndpoint(spec.V1.SpecificationUrl, spec.V1.Version)) |> ignore
+    app.MapScalarApiReference() |> ignore
 
     app.MapGet("/api/v1/superheroes", Func<_> Repo.getAll, spec.V1, spec.GetSuperheroes)
     app.MapGet("/api/v1/superheroes/{name}", Func<_,_> (fun name -> getSuperhero name), spec.V1, spec.GetSuperhero)
