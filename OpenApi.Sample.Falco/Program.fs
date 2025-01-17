@@ -1,18 +1,20 @@
 module Program
 
 open System.Net
+open System.Text.Json
 open Microsoft.AspNetCore.Builder
 open Falco
 open Falco.Routing
 open Falco.HostBuilder
+open Scalar.AspNetCore
 open OpenApi
 
 type Product =
     { Id: int32; Name: string }
 
-type SpecFactory () =
+type SpecFactory (jsonOptions) =
 
-    let v1Factory = OpenApiFactory.create Constants.defaultJsonOptions "Products API" "v1"
+    let v1Factory = OpenApiFactory.create jsonOptions "Products API" "v1"
 
     member _.V1 = v1Factory
 
@@ -28,24 +30,28 @@ type SpecFactory () =
             }
         |> FalcoOpenApi.addOperation v1Factory endpoint
 
+let jsonOptions = JsonSerializerOptions JsonSerializerDefaults.Web
+
 let getProducts =
     [ { Id = 1; Name = "Cat Food" } ]
-    |> Response.ofJson
+    |> Response.ofJsonOptions jsonOptions
 
 [<EntryPoint>]
 let main args =
 
-    let spec = SpecFactory ()
+    let spec = SpecFactory (jsonOptions)
 
-    let useSwaggerUi (app: IApplicationBuilder) =
-        app.UseSwaggerUI (fun o -> o.SwaggerEndpoint(spec.V1.SpecificationUrl, spec.V1.Version))
+    let useOpenApiUI (app: IApplicationBuilder) =
+        app
+            .UseRouting()
+            .UseEndpoints(fun e -> e.MapScalarApiReference() |> ignore)
 
     webHost args {
         endpoints [
             get "/products" getProducts |> spec.GetProducts
             get spec.V1.SpecificationUrl (spec.V1.Write Response.ofPlainText)
         ]
-        use_middleware useSwaggerUi
+        use_middleware useOpenApiUI
     }
 
     0
