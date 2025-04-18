@@ -17,6 +17,6 @@ let toOperation = function
     | ANY     -> NotSupportedException "HttpVerb" |> raise
 
 let addOperation (factory: OpenApiFactory) (endpoint: HttpEndpoint) operation =
-    let httpVerb = endpoint.Handlers |> List.head |> fst |> toOperation
+    let httpVerb = endpoint.Handlers |> Seq.head |> fst |> toOperation
     factory.AddOperation httpVerb endpoint.Pattern operation
     endpoint

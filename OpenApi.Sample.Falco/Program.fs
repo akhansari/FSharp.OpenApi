@@ -5,7 +5,6 @@ open System.Text.Json
 open Microsoft.AspNetCore.Builder
 open Falco
 open Falco.Routing
-open Falco.HostBuilder
 open Scalar.AspNetCore
 open OpenApi
 
@@ -39,19 +38,21 @@ let getProducts =
 [<EntryPoint>]
 let main args =
 
-    let spec = SpecFactory (jsonOptions)
+    let spec = SpecFactory jsonOptions
 
-    let useOpenApiUI (app: IApplicationBuilder) =
-        app
-            .UseRouting()
-            .UseEndpoints(fun e -> e.MapScalarApiReference() |> ignore)
+    let webApp = WebApplication.Create args
 
-    webHost args {
-        endpoints [
-            get "/products" getProducts |> spec.GetProducts
-            get spec.V1.SpecificationUrl (spec.V1.Write Response.ofPlainText)
-        ]
-        use_middleware useOpenApiUI
-    }
+    let endpoints = [
+        get "/products" getProducts |> spec.GetProducts
+        get spec.V1.SpecificationUrl (spec.V1.Write Response.ofPlainText)
+    ]
+
+    webApp
+        .UseRouting()
+        .UseFalco(endpoints)
+        .MapScalarApiReference()
+    |> ignore
+        
+    webApp.Run()
 
     0
