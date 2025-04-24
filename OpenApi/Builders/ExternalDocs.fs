@@ -21,6 +21,6 @@ type ExternalDocsBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiExternalDocs, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiExternalDocs, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

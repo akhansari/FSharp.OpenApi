@@ -10,9 +10,19 @@ type DocumentBuilder () =
         doc.Paths <- OpenApiPaths ()
         doc
 
+    [<CustomOperation "workspace">]
+    member _.Workspace (state: OpenApiDocument, value) =
+        state.Workspace <- value
+        state
+
     [<CustomOperation "info">]
     member _.Info (state: OpenApiDocument, value) =
         state.Info <- value
+        state
+
+    [<CustomOperation "jsonSchemaDialect">]
+    member _.JsonSchemaDialect (state: OpenApiDocument, value) =
+        state.JsonSchemaDialect <- value
         state
 
     [<CustomOperation "servers">]
@@ -23,6 +33,11 @@ type DocumentBuilder () =
     [<CustomOperation "paths">]
     member _.Paths (state: OpenApiDocument, value) =
         Seq.iter state.Paths.Add value
+        state
+
+    [<CustomOperation "webhooks">]
+    member _.Webhooks (state: OpenApiDocument, values: KVs<_, OpenApiPathItem>) =
+        values |> Seq.iter state.Webhooks.Add
         state
 
     [<CustomOperation "components">]
@@ -36,8 +51,8 @@ type DocumentBuilder () =
         state
 
     [<CustomOperation "tags">]
-    member _.Tags (state: OpenApiDocument, value) =
-        Seq.iter state.Tags.Add value
+    member _.Tags (state: OpenApiDocument, values) =
+        values |> Seq.iter state.Tags.Add
         state
 
     [<CustomOperation "externalDocs">]
@@ -46,6 +61,12 @@ type DocumentBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiDocument, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiDocument, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state
+
+    [<CustomOperation "annotations">]
+    member _.Annotations (state: OpenApiDocument, values: KVs<_, obj>) =
+        values |> Seq.iter state.Annotations.Add
+        state
+

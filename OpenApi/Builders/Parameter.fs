@@ -87,8 +87,8 @@ type ParameterBuilder () =
 
     /// Examples of the parameter's potential value.
     [<CustomOperation "examples">]
-    member _.Examples (state: OpenApiParameter, value: KVs<_, OpenApiExample>) =
-        value |> Seq.iter state.Examples.Add
+    member _.Examples (state: OpenApiParameter, values: KVs<_, OpenApiExample>) =
+        values |> Seq.iter state.Examples.Add
         state
 
     /// Example of the parameter's potential value.
@@ -107,21 +107,11 @@ type ParameterBuilder () =
     /// The key is the media type and the value describes it.
     /// The map MUST only contain one entry.
     [<CustomOperation "content">]
-    member _.Content (state: OpenApiParameter, value: KVs<string, 'T>) =
-        value |> Seq.iter state.Content.Add
+    member _.Content (state: OpenApiParameter, values: KVs<string, 'T>) =
+        values |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiParameter, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiParameter, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiParameter, value) =
-        state.Reference <- value
+    member _.Extensions (state: OpenApiParameter, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

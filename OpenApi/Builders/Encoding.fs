@@ -25,8 +25,8 @@ type EncodingBuilder () =
     /// Content-Type is described separately and SHALL be ignored in this section.
     /// This property SHALL be ignored if the request body media type is not a multipart.
     [<CustomOperation "headers">]
-    member _.Headers (state: OpenApiEncoding, value: KVs<_, OpenApiHeader>) =
-        value |> Seq.iter state.Headers.Add
+    member _.Headers (state: OpenApiEncoding, values: KVs<_, OpenApiHeader>) =
+        values |> Seq.iter state.Headers.Add
         state
 
     /// Describes how a specific property value will be serialized depending on its type.
@@ -57,6 +57,6 @@ type EncodingBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiEncoding, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiEncoding, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

@@ -33,6 +33,6 @@ type OAuthFlowsBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiOAuthFlows, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiOAuthFlows, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

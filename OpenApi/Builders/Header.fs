@@ -55,26 +55,16 @@ type HeaderBuilder () =
         state
 
     [<CustomOperation "examples">]
-    member _.Examples (state: OpenApiHeader, value: KVs<_, OpenApiExample>) =
-        value |> Seq.iter state.Examples.Add
+    member _.Examples (state: OpenApiHeader, values: KVs<_, OpenApiExample>) =
+        values |> Seq.iter state.Examples.Add
         state
 
     [<CustomOperation "content">]
-    member _.Content (state: OpenApiHeader, value: KVs<_, OpenApiMediaType>) =
-        value |> Seq.iter state.Content.Add
+    member _.Content (state: OpenApiHeader, values: KVs<_, OpenApiMediaType>) =
+        values |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiHeader, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiHeader, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiHeader, value) =
-        state.Reference <- value
+    member _.Extensions (state: OpenApiHeader, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

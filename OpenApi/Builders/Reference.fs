@@ -1,23 +1,21 @@
-﻿namespace OpenApi.Builders
+namespace OpenApi.Builders
 
 open Microsoft.OpenApi.Models
 
 type ReferenceBuilder () =
 
     member _.Yield _ =
-        OpenApiReference ()
+        OpenApiReference()
 
-    [<CustomOperation "externalResource">]
-    member _.ExternalResource (state: OpenApiReference, value) =
-        state.ExternalResource <- value
+    // This class has many init only properties
+
+    [<CustomOperation "summary">]
+    member _.Summary (state: OpenApiReference, value) =
+        state.Summary <- value
         state
 
-    [<CustomOperation "referenceType">]
-    member _.Type (state: OpenApiReference, value) =
-        state.Type <- value
+    [<CustomOperation "description">]
+    member _.Description (state: OpenApiReference, value) =
+        state.Description <- value
         state
 
-    [<CustomOperation "id">]
-    member _.Id (state: OpenApiReference, value) =
-        state.Id <- value
-        state

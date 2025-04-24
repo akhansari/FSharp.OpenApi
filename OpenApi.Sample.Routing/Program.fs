@@ -12,9 +12,15 @@ open OpenApi
 type SpecFactory () =
 
     let jsonOptions = JsonSerializerOptions JsonSerializerDefaults.Web
-    let v1Factory = OpenApiFactory.create jsonOptions "Heroes Open Data" "v1"
 
-    let superheroesTag = apiTag { name "Superheroes" }
+    let [<Literal>] superheroesTag = "Superheroes"
+
+    let v1Factory =
+        apiDocument {
+            info (apiInfo { title "Heroes Open Data"; version "v1" })
+            tags [ apiTag { name superheroesTag; description "Help the world become a better place" } ]
+        }
+        |> OpenApiFactory.create jsonOptions
 
     let superheroSample: Repo.Superhero =
         { Name = "name"

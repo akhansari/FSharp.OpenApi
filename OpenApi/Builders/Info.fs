@@ -20,6 +20,12 @@ type InfoBuilder () =
         state.Version <- value
         state
 
+    /// A short summary of the API.
+    [<CustomOperation "summary">]
+    member _.Summary (state: OpenApiInfo, value) =
+        state.Summary <- value
+        state
+
     /// A short description of the API. CommonMark syntax.
     [<CustomOperation "description">]
     member _.Description (state: OpenApiInfo, value) =
@@ -45,6 +51,6 @@ type InfoBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiInfo, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiInfo, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
 
 type DiscriminatorBuilder () =
@@ -15,6 +16,11 @@ type DiscriminatorBuilder () =
 
     /// An object to hold mappings between payload values and schema names or references.
     [<CustomOperation "mapping">]
-    member _.Mapping (state: OpenApiDiscriminator, value: KVs<_, string>) =
-        value |> Seq.iter state.Mapping.Add
+    member _.Mapping (state: OpenApiDiscriminator, values: KVs<_, string>) =
+        values |> Seq.iter state.Mapping.Add
+        state
+
+    [<CustomOperation "extensions">]
+    member _.Extensions (state: OpenApiDiscriminator, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

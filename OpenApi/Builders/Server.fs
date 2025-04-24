@@ -27,11 +27,11 @@ type ServerBuilder () =
     /// A map between a variable name and its value.
     /// The value is used for substitution in the server's URL template.
     [<CustomOperation "variables">]
-    member _.Variables (state: OpenApiServer, value: KVs<_, OpenApiServerVariable>) =
-        value |> Seq.iter state.Variables.Add
+    member _.Variables (state: OpenApiServer, values: KVs<_, OpenApiServerVariable>) =
+        values |> Seq.iter state.Variables.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiServer, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiServer, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

@@ -2,6 +2,7 @@
 
 open Microsoft.OpenApi
 open Microsoft.OpenApi.Models
+open Microsoft.OpenApi.Models.References
 
 type OperationBuilder () =
 
@@ -10,15 +11,20 @@ type OperationBuilder () =
 
     /// REQUIRED. The list of possible responses as they are returned from executing this operation.
     [<CustomOperation "responses">]
-    member _.Responses (state: OpenApiOperation, value: KVs<'HttpStatusCode, OpenApiResponse>) =
-        value |> Seq.iter (fun (k, v) -> state.Responses.Add (string k, v))
+    member _.Responses (state: OpenApiOperation, values: KVs<'HttpStatusCode, OpenApiResponse>) =
+        values |> Seq.iter (fun (k, v) -> state.Responses.Add (string k, v))
+        state
+
+    [<CustomOperation "tags">]
+    member _.Tags (state: OpenApiOperation, values: string seq) =
+        values |> Seq.map OpenApiTagReference |> Seq.iter state.Tags.Add
         state
 
     /// A list of tags for API documentation control.
     /// Tags can be used for logical grouping of operations by resources or any other qualifier.
-    [<CustomOperation "tags">]
-    member _.Tags (state: OpenApiOperation, value: OpenApiTag seq) =
-        Seq.iter state.Tags.Add value
+    [<CustomOperation "tagReferences">]
+    member _.TagReferences (state: OpenApiOperation, values: OpenApiTagReference seq) =
+        values |> Seq.iter state.Tags.Add
         state
 
     /// A short summary of what the operation does.
@@ -56,8 +62,8 @@ type OperationBuilder () =
     /// A unique parameter is defined by a combination of a name and location.
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
     [<CustomOperation "parameters">]
-    member _.Parameters (state: OpenApiOperation, value: OpenApiParameter seq) =
-        Seq.iter state.Parameters.Add value
+    member _.Parameters (state: OpenApiOperation, values: OpenApiParameter seq) =
+        Seq.iter state.Parameters.Add values
         state
 
     /// The request body applicable for this operation.
@@ -73,8 +79,8 @@ type OperationBuilder () =
     /// Each value in the map is a Callback Object that describes a request
     /// that may be initiated by the API provider and the expected responses.
     [<CustomOperation "callbacks">]
-    member _.CallBacks (state: OpenApiOperation, value: KVs<_, OpenApiCallback>) =
-        value |> Seq.iter state.Callbacks.Add
+    member _.CallBacks (state: OpenApiOperation, values: KVs<_, OpenApiCallback>) =
+        values |> Seq.iter state.Callbacks.Add
         state
 
     /// Declares this operation to be deprecated. Consumers SHOULD refrain from usage of the declared operation.
@@ -91,19 +97,25 @@ type OperationBuilder () =
     /// This definition overrides any declared top-level security.
     /// To remove a top-level security declaration, an empty array can be used.
     [<CustomOperation "security">]
-    member _.Security (state: OpenApiOperation, value: OpenApiSecurityRequirement seq) =
-        value |> Seq.iter state.Security.Add
+    member _.Security (state: OpenApiOperation, values: OpenApiSecurityRequirement seq) =
+        values |> Seq.iter state.Security.Add
         state
 
     /// An alternative server array to service this operation.
     /// If an alternative server object is specified at the Path Item Object or Root level,
     /// it will be overridden by this value.
     [<CustomOperation "servers">]
-    member _.Servers (state: OpenApiOperation, value: OpenApiServer seq) =
-        value |> Seq.iter state.Servers.Add
+    member _.Servers (state: OpenApiOperation, values: OpenApiServer seq) =
+        values |> Seq.iter state.Servers.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiOperation, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiOperation, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state
+
+    [<CustomOperation "annotations">]
+    member _.Annotations (state: OpenApiOperation, values: KVs<_, obj>) =
+        values |> Seq.iter state.Annotations.Add
+        state
+

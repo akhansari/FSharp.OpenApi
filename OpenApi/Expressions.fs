@@ -31,6 +31,8 @@ let apiDocument = DocumentBuilder ()
 /// A single encoding definition applied to a single schema property.
 let apiEncoding = EncodingBuilder ()
 
+let apiError = ErrorBuilder()
+
 /// Example object.
 let apiExample = ExampleBuilder ()
 
@@ -112,3 +114,6 @@ let apiServer = ServerBuilder ()
 let apiServerVariable = ServerVariableBuilder ()
 
 let apiTag = TagBuilder ()
+
+let apiXml = XmlBuilder ()
+

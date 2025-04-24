@@ -24,16 +24,6 @@ type TagBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiTag, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiTag, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiTag, value) =
-        state.Reference <- value
+    member _.Extensions (state: OpenApiTag, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

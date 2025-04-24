@@ -1,7 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open System.Text.Json.Nodes
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Models
 
 type RequestBodyBuilder () =
@@ -13,13 +13,13 @@ type RequestBodyBuilder () =
     /// The key is a media type or media type range and the value describes it.
     /// For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
     [<CustomOperation "content">]
-    member _.Content (state: OpenApiRequestBody, value: KVs<_, OpenApiMediaType>) =
-        value |> Seq.iter state.Content.Add
+    member _.Content (state: OpenApiRequestBody, values: KVs<_, OpenApiMediaType>) =
+        values |> Seq.iter state.Content.Add
         state
 
     /// JSON content.
     [<CustomOperation "jsonContent">]
-    member _.JsonContent (state: OpenApiRequestBody, example: OpenApiString) =
+    member _.JsonContent (state: OpenApiRequestBody, example: JsonNode) =
         let mediaType = OpenApiMediaType (Example = example, Schema = OpenApiSchema ())
         state.Content.Add (MediaTypes.Json, mediaType)
         state
@@ -36,17 +36,7 @@ type RequestBodyBuilder () =
         state.Required <- value
         state
 
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiRequestBody, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiRequestBody, value) =
-        state.Reference <- value
-        state
-
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiRequestBody, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiRequestBody, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

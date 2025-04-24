@@ -20,7 +20,12 @@ type LicenseBuilder () =
         state.Url <- value
         state
 
+    [<CustomOperation "identifier">]
+    member _.Identifier (state: OpenApiLicense, value) =
+        state.Identifier <- value
+        state
+
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiLicense, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiLicense, values: KVs<_, Interfaces.IOpenApiExtension>) =
+        values |> Seq.iter state.Extensions.Add
         state

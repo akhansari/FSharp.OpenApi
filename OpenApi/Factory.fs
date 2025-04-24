@@ -3,7 +3,6 @@
 open System
 open System.Text.Json
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Any
 open Microsoft.OpenApi.Extensions
 open Microsoft.OpenApi.Models
 open OpenApi.Expressions
@@ -21,15 +20,17 @@ type OpenApiFactory =
         then "/openapi/v1.json"
         else $"/openapi/{this.Version}.json"
 
-    member this.Serialize () =
-        this.Document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
+    member this.Serialize (?version, ?format) =
+        let version = defaultArg version OpenApiSpecVersion.OpenApi3_1
+        let format = defaultArg format OpenApiFormat.Json
+        this.Document.SerializeAsync(version, format) |> Async.AwaitTask |> Async.RunSynchronously 
 
     member this.MakeJsonContent content =
-        JsonSerializer.Serialize (content, this.JsonSerializerOptions)
-        |> OpenApiString
+        JsonSerializer.SerializeToNode(content, this.JsonSerializerOptions)
 
-    member this.Write (writer: string -> 'T) =
-        this.Serialize () |> writer
+    member this.Write (writer: string -> 'T, ?version, ?format) =
+        this.Serialize(?version = version, ?format = format)
+        |> writer
 
     member this.AddOperation operationType path operation =
         if this.Document.Paths.ContainsKey path then
@@ -41,11 +42,11 @@ type OpenApiFactory =
 [<RequireQualifiedAccess>]
 module OpenApiFactory =
 
-    let create (jsonSerializerOptions: JsonSerializerOptions) docTitle docVersion =
-        jsonSerializerOptions.WriteIndented <- true
-        let document =
-            apiDocument {
-                info (apiInfo { title docTitle; version docVersion })
-            }
+    let simpleDocument docTitle docVersion =
+        apiDocument {
+            info (apiInfo { title docTitle; version docVersion })
+        }
+
+    let create jsonSerializerOptions document =
         { JsonSerializerOptions = jsonSerializerOptions
           Document = document }
