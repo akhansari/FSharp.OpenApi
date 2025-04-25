@@ -17,14 +17,14 @@ type OperationBuilder () =
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiOperation, values: string seq) =
-        values |> Seq.map OpenApiTagReference |> Seq.iter state.Tags.Add
+        values |> Seq.map OpenApiTagReference |> Seq.iter (state.Tags.Add >> ignore)
         state
 
     /// A list of tags for API documentation control.
     /// Tags can be used for logical grouping of operations by resources or any other qualifier.
     [<CustomOperation "tagReferences">]
     member _.TagReferences (state: OpenApiOperation, values: OpenApiTagReference seq) =
-        values |> Seq.iter state.Tags.Add
+        values |> Seq.iter (state.Tags.Add >> ignore)
         state
 
     /// A short summary of what the operation does.
@@ -114,8 +114,7 @@ type OperationBuilder () =
         values |> Seq.iter state.Extensions.Add
         state
 
-    [<CustomOperation "annotations">]
-    member _.Annotations (state: OpenApiOperation, values: KVs<_, obj>) =
-        values |> Seq.iter state.Annotations.Add
+    [<CustomOperation "metadata">]
+    member _.Metadata (state: OpenApiOperation, values: KVs<_, obj>) =
+        values |> Seq.iter state.Metadata.Add
         state
-

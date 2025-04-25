@@ -45,14 +45,14 @@ type DocumentBuilder () =
         state.Components <- value
         state
 
-    [<CustomOperation "securityRequirements">]
-    member _.SecurityRequirements (state: OpenApiDocument, value) =
-        Seq.iter state.SecurityRequirements.Add value
+    [<CustomOperation "security">]
+    member _.security (state: OpenApiDocument, values: OpenApiSecurityRequirement seq) =
+        values |> Seq.iter state.Security.Add
         state
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiDocument, values) =
-        values |> Seq.iter state.Tags.Add
+        values |> Seq.iter (state.Tags.Add >> ignore)
         state
 
     [<CustomOperation "externalDocs">]
@@ -65,8 +65,7 @@ type DocumentBuilder () =
         values |> Seq.iter state.Extensions.Add
         state
 
-    [<CustomOperation "annotations">]
-    member _.Annotations (state: OpenApiDocument, values: KVs<_, obj>) =
-        values |> Seq.iter state.Annotations.Add
+    [<CustomOperation "metadata">]
+    member _.Metadata (state: OpenApiDocument, values: KVs<_, obj>) =
+        values |> Seq.iter state.Metadata.Add
         state
-

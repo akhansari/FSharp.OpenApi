@@ -22,7 +22,7 @@ type OpenApiFactory =
 
     member this.Serialize (?version, ?format) =
         let version = defaultArg version OpenApiSpecVersion.OpenApi3_1
-        let format = defaultArg format OpenApiFormat.Json
+        let format = defaultArg format "JSON"
         this.Document.SerializeAsync(version, format) |> Async.AwaitTask |> Async.RunSynchronously 
 
     member this.MakeJsonContent content =

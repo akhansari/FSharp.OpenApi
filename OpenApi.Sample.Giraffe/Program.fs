@@ -1,11 +1,11 @@
 module Program
 
 open System.Net
+open System.Net.Http
 open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
-open Microsoft.OpenApi.Models
 open Scalar.AspNetCore
 open Giraffe
 open OpenApi
@@ -34,7 +34,7 @@ type SpecFactory () =
                     jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
                 } ]
             }
-        |> addOperation v1Factory OperationType.Get path
+        |> addOperation v1Factory HttpMethod.Get path
 
 let getProducts : HttpHandler =
     fun _ ctx ->

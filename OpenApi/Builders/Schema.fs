@@ -62,9 +62,9 @@ type SchemaBuilder () =
         values |> Seq.iter state.Definitions.Add
         state
 
-    [<CustomOperation "unEvaluatedPropertie">]
-    member _.UnEvaluatedProperties (state: OpenApiSchema, value) =
-        state.UnEvaluatedProperties <- value
+    [<CustomOperation "unevaluatedPropertie">]
+    member _.UnevaluatedProperties (state: OpenApiSchema, value) =
+        state.UnevaluatedProperties <- value
         state
 
     [<CustomOperation "externalDoc">]
@@ -89,32 +89,22 @@ type SchemaBuilder () =
 
     [<CustomOperation "maximum">]
     member _.Maximum (state: OpenApiSchema, value) =
-        state.Maximum <- Nullable value
+        state.Maximum <- value
         state
 
     [<CustomOperation "exclusiveMaximum">]
     member _.ExclusiveMaximum (state: OpenApiSchema, value) =
-        state.ExclusiveMaximum <- Nullable value
-        state
-
-    [<CustomOperation "v31ExclusiveMaximum">]
-    member _.V31ExclusiveMaximum (state: OpenApiSchema, value) =
-        state.V31ExclusiveMaximum <- Nullable value
+        state.ExclusiveMaximum <- value
         state
 
     [<CustomOperation "minimum">]
     member _.Minimum (state: OpenApiSchema, value) =
-        state.Minimum <- Nullable value
+        state.Minimum <- value
         state
 
     [<CustomOperation "exclusiveMinimum">]
     member _.ExclusiveMinimum (state: OpenApiSchema, value) =
-        state.ExclusiveMinimum <- Nullable value
-        state
-
-    [<CustomOperation "v31ExclusiveMinimum">]
-    member _.V31ExclusiveMinimum (state: OpenApiSchema, value) =
-        state.V31ExclusiveMinimum <- Nullable value
+        state.ExclusiveMinimum <- value
         state
 
     [<CustomOperation "maxLength">]
@@ -272,8 +262,8 @@ type SchemaBuilder () =
         values |> Seq.iter (fun (k, v) -> state.DependentRequired.Add(k, Collections.Generic.HashSet v))
         state
 
-    [<CustomOperation "annotations">]
-    member _.Annotations (state: OpenApiSchema, values: KVs<_, obj>) =
-        values |> Seq.iter state.Annotations.Add
+    [<CustomOperation "metadata">]
+    member _.Metadata (state: OpenApiSchema, values: KVs<_, obj>) =
+        values |> Seq.iter state.Metadata.Add
         state
 
