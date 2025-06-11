@@ -1,8 +1,6 @@
 ﻿namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
-open Microsoft.OpenApi.Models.References
 
 type OperationBuilder () =
 
@@ -110,7 +108,7 @@ type OperationBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiOperation, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiOperation, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state
 

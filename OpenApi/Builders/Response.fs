@@ -2,7 +2,6 @@ namespace OpenApi.Builders
 
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type ResponseBuilder () =
 
@@ -45,7 +44,7 @@ type ResponseBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiResponse, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiResponse, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state
 

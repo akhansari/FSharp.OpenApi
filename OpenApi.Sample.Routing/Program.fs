@@ -5,7 +5,7 @@ open System.Net
 open System.Text.Json
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Http
-open Microsoft.OpenApi.Models
+open Microsoft.OpenApi
 open Scalar.AspNetCore
 open OpenApi
 

@@ -5,8 +5,8 @@ open System
 open System.Net.Http
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Routing
-open Microsoft.OpenApi.Models
 open OpenApi
+open Microsoft.OpenApi
 
 type IEndpointRouteBuilder with
 

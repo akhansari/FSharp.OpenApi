@@ -1,7 +1,6 @@
 ﻿namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type ServerVariableBuilder () =
 
@@ -24,6 +23,6 @@ type ServerVariableBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiServerVariable, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiServerVariable, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

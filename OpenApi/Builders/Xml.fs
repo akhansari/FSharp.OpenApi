@@ -1,7 +1,6 @@
 namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type XmlBuilder () =
 
@@ -34,6 +33,6 @@ type XmlBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiXml, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiXml, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

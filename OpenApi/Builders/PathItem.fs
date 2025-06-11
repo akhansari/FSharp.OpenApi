@@ -1,7 +1,6 @@
 ﻿namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type PathItemBuilder () =
 
@@ -43,7 +42,7 @@ type PathItemBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiPathItem, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiPathItem, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state
 

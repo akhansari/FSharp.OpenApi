@@ -1,4 +1,4 @@
-#r "nuget: Microsoft.CodeAnalysis.CSharp"
+#r "nuget: Microsoft.CodeAnalysis.CSharp, 4.12.0"
 
 open System
 open System.IO

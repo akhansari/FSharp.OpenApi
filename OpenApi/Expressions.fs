@@ -84,8 +84,6 @@ let apiPathItem = PathItemBuilder ()
 /// The Paths MAY be empty, due to ACL constraints.
 let apiPaths = PathsBuilder ()
 
-let apiReference = ReferenceBuilder ()
-
 /// Describes a single request body.
 let apiRequestBody = RequestBodyBuilder ()
 

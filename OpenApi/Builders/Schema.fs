@@ -3,7 +3,6 @@ namespace OpenApi.Builders
 open System
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type SchemaBuilder () =
 
@@ -248,7 +247,7 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extension (state: OpenApiSchema, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extension (state: OpenApiSchema, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state
 

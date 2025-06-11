@@ -1,7 +1,6 @@
 namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type MediaTypeBuilder () =
 
@@ -38,6 +37,6 @@ type MediaTypeBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiMediaType, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiMediaType, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

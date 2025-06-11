@@ -1,8 +1,6 @@
 ﻿namespace OpenApi.Builders
 
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
-open Microsoft.OpenApi.Models.References
 
 type DiscriminatorBuilder () =
 
@@ -22,6 +20,6 @@ type DiscriminatorBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiDiscriminator, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiDiscriminator, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

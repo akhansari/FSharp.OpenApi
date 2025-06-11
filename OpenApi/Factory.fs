@@ -3,8 +3,6 @@
 open System
 open System.Text.Json
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Extensions
-open Microsoft.OpenApi.Models
 open OpenApi.Expressions
 
 [<NoComparison>]

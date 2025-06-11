@@ -1,7 +1,6 @@
 ﻿namespace OpenApi.Builders
 
-open Microsoft.OpenApi.Models
-open Microsoft.OpenApi.Models.References
+open Microsoft.OpenApi
 
 type SecurityRequirementBuilder () =
 

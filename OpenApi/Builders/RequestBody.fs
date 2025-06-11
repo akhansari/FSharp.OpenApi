@@ -2,7 +2,6 @@
 
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type RequestBodyBuilder () =
 
@@ -37,6 +36,6 @@ type RequestBodyBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiRequestBody, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiRequestBody, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

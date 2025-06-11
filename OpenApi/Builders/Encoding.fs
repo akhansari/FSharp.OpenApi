@@ -2,7 +2,6 @@
 
 open System
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type EncodingBuilder () =
 
@@ -57,6 +56,6 @@ type EncodingBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiEncoding, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiEncoding, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state

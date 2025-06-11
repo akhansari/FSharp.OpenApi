@@ -32,7 +32,6 @@
     <Compile Include="Builders\Operation.fs" />
     <Compile Include="Builders\Parameter.fs" />
     <Compile Include="Builders\PathItem.fs" />
-    <Compile Include="Builders\Reference.fs" />
     <Compile Include="Builders\RequestBody.fs" />
     <Compile Include="Builders\Response.fs" />
     <Compile Include="Builders\Schema.fs" />
@@ -47,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.OpenApi" Version="2.0.0-preview.17" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.0.0-preview.25" />
     <PackageReference Include="System.Text.Json" Version="9.0.4" />
   </ItemGroup>
 

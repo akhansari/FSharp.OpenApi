@@ -2,7 +2,6 @@
 
 open System
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type HeaderBuilder () =
 
@@ -65,6 +64,6 @@ type HeaderBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiHeader, values: KVs<_, Interfaces.IOpenApiExtension>) =
+    member _.Extensions (state: OpenApiHeader, values: KVs<_, IOpenApiExtension>) =
         values |> Seq.iter state.Extensions.Add
         state
