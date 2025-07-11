@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type ServerBuilder () =
@@ -27,10 +28,12 @@ type ServerBuilder () =
     /// The value is used for substitution in the server's URL template.
     [<CustomOperation "variables">]
     member _.Variables (state: OpenApiServer, values: KVs<_, OpenApiServerVariable>) =
+        if isNull state.Variables then state.Variables <- Dictionary()
         values |> Seq.iter state.Variables.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiServer, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

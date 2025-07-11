@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open System.Collections.Generic
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
 
@@ -18,6 +19,7 @@ type ResponseBuilder () =
     /// If a response header is defined with the name "Content-Type", it SHALL be ignored.
     [<CustomOperation "headers">]
     member _.Headers (state: OpenApiResponse, values: KVs<_, OpenApiHeader>) =
+        if isNull state.Headers then state.Headers <- Dictionary()
         values |> Seq.iter state.Headers.Add
         state
 
@@ -26,12 +28,14 @@ type ResponseBuilder () =
     /// For responses that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
     [<CustomOperation "content">]
     member _.Content (state: OpenApiResponse, values: KVs<_, OpenApiMediaType>) =
+        if isNull state.Content then state.Content <- Dictionary()
         values |> Seq.iter state.Content.Add
         state
 
     /// JSON content.
     [<CustomOperation "jsonContent">]
     member _.JsonContent (state: OpenApiResponse, example: JsonNode) =
+        if isNull state.Content then state.Content <- Dictionary()
         let mediaType = OpenApiMediaType (Example = example)
         state.Content.Add (MediaTypes.Json, mediaType)
         state
@@ -40,11 +44,13 @@ type ResponseBuilder () =
     /// The key of the map is a short name for the link, following the naming constraints of the names for Component Objects.
     [<CustomOperation "links">]
     member _.Links (state: OpenApiResponse, values: KVs<_, OpenApiLink>) =
+        if isNull state.Links then state.Links <- Dictionary()
         values |> Seq.iter state.Links.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiResponse, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state
 

@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type ExampleBuilder () =
@@ -37,5 +38,6 @@ type ExampleBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiExample, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

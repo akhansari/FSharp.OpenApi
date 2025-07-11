@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type LinkBuilder () =
@@ -29,6 +30,7 @@ type LinkBuilder () =
     /// that use the same parameter name in different locations (e.g. path.id).
     [<CustomOperation "parameters">]
     member _.Parameters (state: OpenApiLink, values: KVs<_, RuntimeExpressionAnyWrapper>) =
+        if isNull state.Parameters then state.Parameters <- Dictionary()
         values |> Seq.iter state.Parameters.Add
         state
 
@@ -52,5 +54,6 @@ type LinkBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiLink, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

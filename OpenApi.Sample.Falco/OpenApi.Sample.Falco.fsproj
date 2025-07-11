@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Falco" Version="5.0.0" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.1.16" />
+    <PackageReference Include="Falco" Version="5.0.2" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>

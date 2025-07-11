@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type SecuritySchemeBuilder () =
@@ -61,5 +62,6 @@ type SecuritySchemeBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiSecurityScheme, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

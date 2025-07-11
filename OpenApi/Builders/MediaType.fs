@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type MediaTypeBuilder () =
@@ -25,6 +26,7 @@ type MediaTypeBuilder () =
     /// Examples of the media type.
     [<CustomOperation "examples">]
     member _.Examples (state: OpenApiMediaType, values: KVs<_, OpenApiExample>) =
+        if isNull state.Examples then state.Examples <- Dictionary()
         values |> Seq.iter state.Examples.Add
         state
 
@@ -33,10 +35,12 @@ type MediaTypeBuilder () =
     /// The encoding object SHALL only apply to requestBody objects when the media type is multipart or application/x-www-form-urlencoded.
     [<CustomOperation "encoding">]
     member _.Encoding (state: OpenApiMediaType, values: KVs<_, OpenApiEncoding>) =
+        if isNull state.Encoding then state.Encoding <- Dictionary()
         values |> Seq.iter state.Encoding.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiMediaType, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

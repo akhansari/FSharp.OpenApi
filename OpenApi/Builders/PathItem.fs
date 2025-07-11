@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type PathItemBuilder () =
@@ -22,12 +23,14 @@ type PathItemBuilder () =
     /// A definition of a HTTP operation on this path.
     [<CustomOperation "operations">]
     member _.Operations (state: OpenApiPathItem, values: KVs<_, OpenApiOperation>) =
+        if isNull state.Operations then state.Operations <- Dictionary()
         values |> Seq.iter state.Operations.Add
         state
 
     /// An alternative server array to service all operations in this path.
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiPathItem, values: OpenApiServer seq) =
+        if isNull state.Servers then state.Servers <- List()
         values |> Seq.iter state.Servers.Add
         state
 
@@ -38,11 +41,13 @@ type PathItemBuilder () =
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
     [<CustomOperation "parameters">]
     member _.Parameters (state: OpenApiPathItem, values: OpenApiParameter seq) =
+        if isNull state.Parameters then state.Parameters <- List()
         values |> Seq.iter state.Parameters.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiPathItem, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state
 

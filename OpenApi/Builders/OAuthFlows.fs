@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type OAuthFlowsBuilder () =
@@ -33,5 +34,6 @@ type OAuthFlowsBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiOAuthFlows, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

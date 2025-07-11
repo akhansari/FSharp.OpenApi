@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type TagBuilder () =
@@ -24,5 +25,6 @@ type TagBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiTag, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

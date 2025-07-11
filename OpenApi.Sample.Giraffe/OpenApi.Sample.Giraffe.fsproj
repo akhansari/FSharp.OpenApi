@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Giraffe" Version="7.0.2" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.1.16" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>

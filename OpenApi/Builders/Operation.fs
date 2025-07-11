@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type OperationBuilder () =
@@ -10,11 +11,13 @@ type OperationBuilder () =
     /// REQUIRED. The list of possible responses as they are returned from executing this operation.
     [<CustomOperation "responses">]
     member _.Responses (state: OpenApiOperation, values: KVs<'HttpStatusCode, OpenApiResponse>) =
+        if isNull state.Responses then state.Responses <- OpenApiResponses()
         values |> Seq.iter (fun (k, v) -> state.Responses.Add (string k, v))
         state
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiOperation, values: string seq) =
+        if isNull state.Tags then state.Tags <- HashSet()
         values |> Seq.map OpenApiTagReference |> Seq.iter (state.Tags.Add >> ignore)
         state
 
@@ -22,6 +25,7 @@ type OperationBuilder () =
     /// Tags can be used for logical grouping of operations by resources or any other qualifier.
     [<CustomOperation "tagReferences">]
     member _.TagReferences (state: OpenApiOperation, values: OpenApiTagReference seq) =
+        if isNull state.Tags then state.Tags <- HashSet()
         values |> Seq.iter (state.Tags.Add >> ignore)
         state
 
@@ -61,6 +65,7 @@ type OperationBuilder () =
     /// The list can use the Reference Object to link to parameters that are defined at the OpenAPI Object's components/parameters.
     [<CustomOperation "parameters">]
     member _.Parameters (state: OpenApiOperation, values: OpenApiParameter seq) =
+        if isNull state.Parameters then state.Parameters <- List()
         Seq.iter state.Parameters.Add values
         state
 
@@ -78,6 +83,7 @@ type OperationBuilder () =
     /// that may be initiated by the API provider and the expected responses.
     [<CustomOperation "callbacks">]
     member _.CallBacks (state: OpenApiOperation, values: KVs<_, OpenApiCallback>) =
+        if isNull state.Callbacks then state.Callbacks <- Dictionary()
         values |> Seq.iter state.Callbacks.Add
         state
 
@@ -96,6 +102,7 @@ type OperationBuilder () =
     /// To remove a top-level security declaration, an empty array can be used.
     [<CustomOperation "security">]
     member _.Security (state: OpenApiOperation, values: OpenApiSecurityRequirement seq) =
+        if isNull state.Security then state.Security <- List()
         values |> Seq.iter state.Security.Add
         state
 
@@ -104,15 +111,18 @@ type OperationBuilder () =
     /// it will be overridden by this value.
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiOperation, values: OpenApiServer seq) =
+        if isNull state.Servers then state.Servers <- List()
         values |> Seq.iter state.Servers.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiOperation, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "metadata">]
     member _.Metadata (state: OpenApiOperation, values: KVs<_, obj>) =
+        if isNull state.Metadata then state.Metadata <- Dictionary()
         values |> Seq.iter state.Metadata.Add
         state

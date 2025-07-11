@@ -1,6 +1,7 @@
 ﻿namespace OpenApi.Builders
 
 open System
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type HeaderBuilder () =
@@ -55,15 +56,18 @@ type HeaderBuilder () =
 
     [<CustomOperation "examples">]
     member _.Examples (state: OpenApiHeader, values: KVs<_, OpenApiExample>) =
+        if isNull state.Examples then state.Examples <- Dictionary()
         values |> Seq.iter state.Examples.Add
         state
 
     [<CustomOperation "content">]
     member _.Content (state: OpenApiHeader, values: KVs<_, OpenApiMediaType>) =
+        if isNull state.Content then state.Content <- Dictionary()
         values |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiHeader, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

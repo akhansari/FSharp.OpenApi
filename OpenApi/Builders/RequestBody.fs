@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
 
@@ -13,12 +14,14 @@ type RequestBodyBuilder () =
     /// For requests that match multiple keys, only the most specific key is applicable. e.g. text/plain overrides text/*
     [<CustomOperation "content">]
     member _.Content (state: OpenApiRequestBody, values: KVs<_, OpenApiMediaType>) =
+        if isNull state.Content then state.Content <- Dictionary()
         values |> Seq.iter state.Content.Add
         state
 
     /// JSON content.
     [<CustomOperation "jsonContent">]
     member _.JsonContent (state: OpenApiRequestBody, example: JsonNode) =
+        if isNull state.Content then state.Content <- Dictionary()
         let mediaType = OpenApiMediaType (Example = example, Schema = OpenApiSchema ())
         state.Content.Add (MediaTypes.Json, mediaType)
         state
@@ -37,5 +40,6 @@ type RequestBodyBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiRequestBody, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

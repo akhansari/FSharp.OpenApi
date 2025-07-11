@@ -1,6 +1,7 @@
 ﻿namespace OpenApi.Builders
 
 open System
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type EncodingBuilder () =
@@ -25,6 +26,7 @@ type EncodingBuilder () =
     /// This property SHALL be ignored if the request body media type is not a multipart.
     [<CustomOperation "headers">]
     member _.Headers (state: OpenApiEncoding, values: KVs<_, OpenApiHeader>) =
+        if isNull state.Headers then state.Headers <- Dictionary()
         values |> Seq.iter state.Headers.Add
         state
 
@@ -57,5 +59,6 @@ type EncodingBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiEncoding, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type XmlBuilder () =
@@ -34,5 +35,6 @@ type XmlBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiXml, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

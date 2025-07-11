@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type InfoBuilder () =
@@ -51,5 +52,6 @@ type InfoBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiInfo, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

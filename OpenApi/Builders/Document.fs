@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type DocumentBuilder () =
@@ -26,6 +27,7 @@ type DocumentBuilder () =
 
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiDocument, value) =
+        if state.Servers = null then state.Servers <- List()
         Seq.iter state.Servers.Add value
         state
 
@@ -36,6 +38,7 @@ type DocumentBuilder () =
 
     [<CustomOperation "webhooks">]
     member _.Webhooks (state: OpenApiDocument, values: KVs<_, OpenApiPathItem>) =
+        if isNull state.Webhooks then state.Webhooks <- Dictionary()
         values |> Seq.iter state.Webhooks.Add
         state
 
@@ -46,11 +49,13 @@ type DocumentBuilder () =
 
     [<CustomOperation "security">]
     member _.security (state: OpenApiDocument, values: OpenApiSecurityRequirement seq) =
+        if isNull state.Security then state.Security <- List()
         values |> Seq.iter state.Security.Add
         state
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiDocument, values) =
+        if state.Tags = null then state.Tags <- HashSet()
         values |> Seq.iter (state.Tags.Add >> ignore)
         state
 
@@ -61,10 +66,12 @@ type DocumentBuilder () =
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiDocument, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "metadata">]
     member _.Metadata (state: OpenApiDocument, values: KVs<_, obj>) =
+        if isNull state.Metadata then state.Metadata <- Dictionary()
         values |> Seq.iter state.Metadata.Add
         state

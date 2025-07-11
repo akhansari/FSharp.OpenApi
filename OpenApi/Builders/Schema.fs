@@ -1,6 +1,7 @@
 namespace OpenApi.Builders
 
 open System
+open System.Collections.Generic
 open System.Text.Json.Nodes
 open Microsoft.OpenApi
 
@@ -41,6 +42,7 @@ type SchemaBuilder () =
     /// Used in meta-schemas to identify the vocabularies available for use in schemas described by that meta-schema.
     [<CustomOperation "vocabulary">]
     member _.Vocabulary (state: OpenApiSchema, values: KVs<_, bool>) =
+        if isNull state.Vocabulary then state.Vocabulary <- Dictionary()
         values |> Seq.iter state.Vocabulary.Add
         state
 
@@ -58,6 +60,7 @@ type SchemaBuilder () =
 
     [<CustomOperation "definitions">]
     member _.Definitions (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.Definitions then state.Definitions <- Dictionary()
         values |> Seq.iter state.Definitions.Add
         state
 
@@ -138,16 +141,19 @@ type SchemaBuilder () =
 
     [<CustomOperation "allOf">]
     member _.AllOf (state: OpenApiSchema, value) =
+        if isNull state.AllOf then state.AllOf <- List()
         value |> Seq.iter (fun v -> state.AllOf.Add v)
         state
 
     [<CustomOperation "oneOf">]
     member _.OneOf (state: OpenApiSchema, value) =
+        if isNull state.OneOf then state.OneOf <- List()
         value |> Seq.iter (fun v -> state.OneOf.Add v)
         state
 
     [<CustomOperation "anyOf">]
     member _.AnyOf (state: OpenApiSchema, value) =
+        if isNull state.AnyOf then state.AnyOf <- List()
         value |> Seq.iter (fun v -> state.AnyOf.Add v)
         state
 
@@ -158,6 +164,7 @@ type SchemaBuilder () =
 
     [<CustomOperation "required">]
     member _.Required (state: OpenApiSchema, value) =
+        if isNull state.Required then state.Required <- HashSet()
         value |> Seq.iter (fun v -> state.Required.Add v |> ignore)
         state
 
@@ -183,11 +190,13 @@ type SchemaBuilder () =
 
     [<CustomOperation "properties">]
     member _.Properties (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.Properties then state.Properties <- Dictionary()
         values |> Seq.iter state.Properties.Add
         state
 
     [<CustomOperation "patternPropertie">]
     member _.PatternPropertie (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.PatternProperties then state.PatternProperties <- Dictionary()
         values |> Seq.iter state.PatternProperties.Add
         state
 
@@ -223,11 +232,13 @@ type SchemaBuilder () =
 
     [<CustomOperation "examples">]
     member _.Examples (state: OpenApiSchema, value) =
+        if isNull state.Examples then state.Examples <- List()
         Seq.iter state.Examples.Add value
         state
 
     [<CustomOperation "enums">]
     member _.Enums (state: OpenApiSchema, values: JsonNode seq) =
+        if isNull state.Enum then state.Enum <- List()
         Seq.iter state.Enum.Add values
         state
 
@@ -243,11 +254,13 @@ type SchemaBuilder () =
 
     [<CustomOperation "unrecognizedKeywords">]
     member _.UnrecognizedKeywords (state: OpenApiSchema, values: KVs<_, JsonNode>) =
+        if isNull state.UnrecognizedKeywords then state.UnrecognizedKeywords <- Dictionary()
         values |> Seq.iter state.UnrecognizedKeywords.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extension (state: OpenApiSchema, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state
 
@@ -258,11 +271,13 @@ type SchemaBuilder () =
 
     [<CustomOperation "dependentRequired">]
     member _.DependentRequired (state: OpenApiSchema, values: KVs<_, Set<string>>) =
-        values |> Seq.iter (fun (k, v) -> state.DependentRequired.Add(k, Collections.Generic.HashSet v))
+        if isNull state.DependentRequired then state.DependentRequired <- Dictionary()
+        values |> Seq.iter (fun (k, v) -> state.DependentRequired.Add(k, HashSet v))
         state
 
     [<CustomOperation "metadata">]
     member _.Metadata (state: OpenApiSchema, values: KVs<_, obj>) =
+        if isNull state.Metadata then state.Metadata <- Dictionary()
         values |> Seq.iter state.Metadata.Add
         state
 

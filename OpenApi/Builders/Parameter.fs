@@ -1,6 +1,7 @@
 ﻿namespace OpenApi.Builders
 
 open System
+open System.Collections.Generic
 open Microsoft.OpenApi
 
 type ParameterBuilder () =
@@ -87,6 +88,7 @@ type ParameterBuilder () =
     /// Examples of the parameter's potential value.
     [<CustomOperation "examples">]
     member _.Examples (state: OpenApiParameter, values: KVs<_, OpenApiExample>) =
+        if isNull state.Examples then state.Examples <- Dictionary()
         values |> Seq.iter state.Examples.Add
         state
 
@@ -107,10 +109,12 @@ type ParameterBuilder () =
     /// The map MUST only contain one entry.
     [<CustomOperation "content">]
     member _.Content (state: OpenApiParameter, values: KVs<string, 'T>) =
+        if isNull state.Content then state.Content <- Dictionary()
         values |> Seq.iter state.Content.Add
         state
 
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiParameter, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
         values |> Seq.iter state.Extensions.Add
         state

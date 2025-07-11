@@ -19,6 +19,8 @@ Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample.Giraffe", "O
 EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OpenApi.Sample.Falco", "OpenApi.Sample.Falco\OpenApi.Sample.Falco.fsproj", "{85E0390C-6D68-43A3-92BD-BDCF579791E4}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OpenApi.Tests", "OpenApi.Tests\OpenApi.Tests.fsproj", "{8FF3BDF5-DE86-42F9-8625-36A627EAF0B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{85E0390C-6D68-43A3-92BD-BDCF579791E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{85E0390C-6D68-43A3-92BD-BDCF579791E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{85E0390C-6D68-43A3-92BD-BDCF579791E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FF3BDF5-DE86-42F9-8625-36A627EAF0B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FF3BDF5-DE86-42F9-8625-36A627EAF0B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FF3BDF5-DE86-42F9-8625-36A627EAF0B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FF3BDF5-DE86-42F9-8625-36A627EAF0B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
