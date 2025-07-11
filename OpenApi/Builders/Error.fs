@@ -8,7 +8,7 @@ type ErrorBuilder () =
         OpenApiError ("", "")
 
     [<CustomOperation "messages">]
-    member _.Name (state: OpenApiError, value) =
+    member _.Messages (state: OpenApiError, value) =
         state.Message <- value
         state
 
