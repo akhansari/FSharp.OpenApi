@@ -1,7 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type ExampleBuilder () =
 
@@ -37,16 +37,7 @@ type ExampleBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiExample, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiExample, value) =
-        state.Reference <- value
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiExample, value) =
-        state.UnresolvedReference <- value
+    member _.Extensions (state: OpenApiExample, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
+        values |> Seq.iter state.Extensions.Add
         state

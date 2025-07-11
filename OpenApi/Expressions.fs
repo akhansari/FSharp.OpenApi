@@ -31,6 +31,8 @@ let apiDocument = DocumentBuilder ()
 /// A single encoding definition applied to a single schema property.
 let apiEncoding = EncodingBuilder ()
 
+let apiError = ErrorBuilder()
+
 /// Example object.
 let apiExample = ExampleBuilder ()
 
@@ -82,8 +84,6 @@ let apiPathItem = PathItemBuilder ()
 /// The Paths MAY be empty, due to ACL constraints.
 let apiPaths = PathsBuilder ()
 
-let apiReference = ReferenceBuilder ()
-
 /// Describes a single request body.
 let apiRequestBody = RequestBodyBuilder ()
 
@@ -112,3 +112,6 @@ let apiServer = ServerBuilder ()
 let apiServerVariable = ServerVariableBuilder ()
 
 let apiTag = TagBuilder ()
+
+let apiXml = XmlBuilder ()
+

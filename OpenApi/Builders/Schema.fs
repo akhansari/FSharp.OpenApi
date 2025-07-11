@@ -1,23 +1,82 @@
 namespace OpenApi.Builders
 
 open System
+open System.Collections.Generic
+open System.Text.Json.Nodes
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Any
-open Microsoft.OpenApi.Models
 
 type SchemaBuilder () =
 
     member _.Yield _ =
         OpenApiSchema ()
 
+    /// Identifies a schema resource with its canonical URI.
+    [<CustomOperation "id">]
+    member _.Id (state: OpenApiSchema, value) =
+        state.Id <- value
+        state
+
+    /// Follow JSON Schema definition. Short text providing information about the data.
     [<CustomOperation "title">]
     member _.Title (state: OpenApiSchema, value) =
         state.Title <- value
         state
 
+    /// A JSON Schema dialect identifier. Value must be a URI.
+    [<CustomOperation "schema">]
+    member _.Schema (state: OpenApiSchema, value) =
+        state.Schema <- value
+        state
+
     [<CustomOperation "schemaType">]
     member _.Type (state: OpenApiSchema, value) =
-        state.Type <- value
+        state.Type <- Nullable value
+        state
+
+    /// Reserves a location for comments from schema authors to readers or maintainers of the schema.
+    [<CustomOperation "comment">]
+    member _.Comment (state: OpenApiSchema, value) =
+        state.Comment <- value
+        state
+
+    /// Used in meta-schemas to identify the vocabularies available for use in schemas described by that meta-schema.
+    [<CustomOperation "vocabulary">]
+    member _.Vocabulary (state: OpenApiSchema, values: KVs<_, bool>) =
+        if isNull state.Vocabulary then state.Vocabulary <- Dictionary()
+        values |> Seq.iter state.Vocabulary.Add
+        state
+
+    /// An applicator that allows for deferring the full resolution until runtime, at which point it is resolved each time it is encountered while evaluating an instance.
+    [<CustomOperation "dynamicRef">]
+    member _.DynamicRef (state: OpenApiSchema, value) =
+        state.DynamicRef <- value
+        state
+
+    /// Used to create plain name fragments that are not tied to any particular structural location for referencing purposes, which are taken into consideration for dynamic referencing.
+    [<CustomOperation "dynamicAnchor">]
+    member _.DynamicAnchor (state: OpenApiSchema, value) =
+        state.DynamicAnchor <- value
+        state
+
+    [<CustomOperation "definitions">]
+    member _.Definitions (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.Definitions then state.Definitions <- Dictionary()
+        values |> Seq.iter state.Definitions.Add
+        state
+
+    [<CustomOperation "unevaluatedPropertie">]
+    member _.UnevaluatedProperties (state: OpenApiSchema, value) =
+        state.UnevaluatedProperties <- value
+        state
+
+    [<CustomOperation "externalDoc">]
+    member _.ExternalDoc (state: OpenApiSchema, value) =
+        state.ExternalDocs <- value
+        state
+
+    [<CustomOperation "const">]
+    member _.Const (state: OpenApiSchema, value) =
+        state.Const <- value
         state
 
     [<CustomOperation "format">]
@@ -32,22 +91,22 @@ type SchemaBuilder () =
 
     [<CustomOperation "maximum">]
     member _.Maximum (state: OpenApiSchema, value) =
-        state.Maximum <- Nullable value
+        state.Maximum <- value
         state
 
     [<CustomOperation "exclusiveMaximum">]
     member _.ExclusiveMaximum (state: OpenApiSchema, value) =
-        state.ExclusiveMaximum <- Nullable value
+        state.ExclusiveMaximum <- value
         state
 
     [<CustomOperation "minimum">]
     member _.Minimum (state: OpenApiSchema, value) =
-        state.Minimum <- Nullable value
+        state.Minimum <- value
         state
 
     [<CustomOperation "exclusiveMinimum">]
     member _.ExclusiveMinimum (state: OpenApiSchema, value) =
-        state.ExclusiveMinimum <- Nullable value
+        state.ExclusiveMinimum <- value
         state
 
     [<CustomOperation "maxLength">]
@@ -80,6 +139,24 @@ type SchemaBuilder () =
         state.WriteOnly <- value
         state
 
+    [<CustomOperation "allOf">]
+    member _.AllOf (state: OpenApiSchema, value) =
+        if isNull state.AllOf then state.AllOf <- List()
+        value |> Seq.iter (fun v -> state.AllOf.Add v)
+        state
+
+    [<CustomOperation "oneOf">]
+    member _.OneOf (state: OpenApiSchema, value) =
+        if isNull state.OneOf then state.OneOf <- List()
+        value |> Seq.iter (fun v -> state.OneOf.Add v)
+        state
+
+    [<CustomOperation "anyOf">]
+    member _.AnyOf (state: OpenApiSchema, value) =
+        if isNull state.AnyOf then state.AnyOf <- List()
+        value |> Seq.iter (fun v -> state.AnyOf.Add v)
+        state
+
     [<CustomOperation "notEqual">]
     member _.Not (state: OpenApiSchema, value) =
         state.Not <- value
@@ -87,6 +164,7 @@ type SchemaBuilder () =
 
     [<CustomOperation "required">]
     member _.Required (state: OpenApiSchema, value) =
+        if isNull state.Required then state.Required <- HashSet()
         value |> Seq.iter (fun v -> state.Required.Add v |> ignore)
         state
 
@@ -111,8 +189,15 @@ type SchemaBuilder () =
         state
 
     [<CustomOperation "properties">]
-    member _.Properties (state: OpenApiSchema, value: KVs<_, OpenApiSchema>) =
-        value |> Seq.iter state.Properties.Add
+    member _.Properties (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.Properties then state.Properties <- Dictionary()
+        values |> Seq.iter state.Properties.Add
+        state
+
+    [<CustomOperation "patternPropertie">]
+    member _.PatternPropertie (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
+        if isNull state.PatternProperties then state.PatternProperties <- Dictionary()
+        values |> Seq.iter state.PatternProperties.Add
         state
 
     [<CustomOperation "maxProperties">]
@@ -145,14 +230,16 @@ type SchemaBuilder () =
         state.Example <- value
         state
 
-    [<CustomOperation "enums">]
-    member _.Enums (state: OpenApiSchema, value: IOpenApiAny seq) =
-        Seq.iter state.Enum.Add value
+    [<CustomOperation "examples">]
+    member _.Examples (state: OpenApiSchema, value) =
+        if isNull state.Examples then state.Examples <- List()
+        Seq.iter state.Examples.Add value
         state
 
-    [<CustomOperation "nullable">]
-    member _.Nullable (state: OpenApiSchema, value) =
-        state.Nullable <- value
+    [<CustomOperation "enums">]
+    member _.Enums (state: OpenApiSchema, values: JsonNode seq) =
+        if isNull state.Enum then state.Enum <- List()
+        Seq.iter state.Enum.Add values
         state
 
     [<CustomOperation "deprecated">]
@@ -165,22 +252,32 @@ type SchemaBuilder () =
         state.Xml <- value
         state
 
+    [<CustomOperation "unrecognizedKeywords">]
+    member _.UnrecognizedKeywords (state: OpenApiSchema, values: KVs<_, JsonNode>) =
+        if isNull state.UnrecognizedKeywords then state.UnrecognizedKeywords <- Dictionary()
+        values |> Seq.iter state.UnrecognizedKeywords.Add
+        state
+
     [<CustomOperation "extensions">]
-    member _.Extension (state: OpenApiSchema, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiSchema, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiSchema, value) =
-        state.Reference <- value
+    member _.Extension (state: OpenApiSchema, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
+        values |> Seq.iter state.Extensions.Add
         state
 
     [<CustomOperation "defaultValue">]
     member _.Default (state: OpenApiSchema, value) =
         state.Default <- value
         state
+
+    [<CustomOperation "dependentRequired">]
+    member _.DependentRequired (state: OpenApiSchema, values: KVs<_, Set<string>>) =
+        if isNull state.DependentRequired then state.DependentRequired <- Dictionary()
+        values |> Seq.iter (fun (k, v) -> state.DependentRequired.Add(k, HashSet v))
+        state
+
+    [<CustomOperation "metadata">]
+    member _.Metadata (state: OpenApiSchema, values: KVs<_, obj>) =
+        if isNull state.Metadata then state.Metadata <- Dictionary()
+        values |> Seq.iter state.Metadata.Add
+        state
+

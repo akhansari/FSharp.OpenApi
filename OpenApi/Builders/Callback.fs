@@ -1,7 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type CallbackBuilder () =
 
@@ -12,21 +12,13 @@ type CallbackBuilder () =
     /// The key value used to identify the path item object is an expression, evaluated at runtime,
     /// that identifies a URL to use for the callback operation.
     [<CustomOperation "pathItems">]
-    member _.PathItems (state: OpenApiCallback, value: KVs<Expressions.RuntimeExpression, OpenApiPathItem>) =
-        value |> Seq.iter state.PathItems.Add
-        state
-
-    [<CustomOperation "unresolvedReference">]
-    member _.UnresolvedReference (state: OpenApiCallback, value) =
-        state.UnresolvedReference <- value
-        state
-
-    [<CustomOperation "reference">]
-    member _.Reference (state: OpenApiCallback, value) =
-        state.Reference <- value
+    member _.PathItems (state: OpenApiCallback, values: KVs<RuntimeExpression, OpenApiPathItem>) =
+        if isNull state.PathItems then state.PathItems <- Dictionary()
+        values |> Seq.iter state.PathItems.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiCallback, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiCallback, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
+        values |> Seq.iter state.Extensions.Add
         state

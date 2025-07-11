@@ -1,11 +1,11 @@
 module Program
 
 open System.Net
+open System.Net.Http
 open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.Extensions.DependencyInjection
-open Microsoft.OpenApi.Models
 open Scalar.AspNetCore
 open Giraffe
 open OpenApi
@@ -15,7 +15,8 @@ type Product = { Id: int32; Name: string }
 type SpecFactory () =
 
     let v1Factory =
-        OpenApiFactory.create Json.FsharpFriendlySerializer.DefaultOptions "Products API" "v1"
+        OpenApiFactory.simpleDocument "Products API" "v1"
+        |> OpenApiFactory.create Json.FsharpFriendlySerializer.DefaultOptions
 
     let addOperation (factory: OpenApiFactory) verb path operation =
         factory.AddOperation verb path operation
@@ -25,7 +26,7 @@ type SpecFactory () =
 
     member _.GetProducts path =
         apiOperation {
-            tags [ apiTag { name "Products" } ]
+            tags [ "Products" ]
             summary "Get the list of products."
             responses [
                 HttpStatusCode.OK, apiResponse {
@@ -33,7 +34,7 @@ type SpecFactory () =
                     jsonContent (v1Factory.MakeJsonContent [ { Id = 0; Name = "name" } ])
                 } ]
             }
-        |> addOperation v1Factory OperationType.Get path
+        |> addOperation v1Factory HttpMethod.Get path
 
 let getProducts : HttpHandler =
     fun _ ctx ->
@@ -49,7 +50,7 @@ let main args =
         choose [
             GET >=> choose [
                 route (spec.GetProducts "/products") >=> getProducts
-                route spec.V1.SpecificationUrl >=> (spec.V1.Write text)
+                route spec.V1.SpecificationUrl >=> spec.V1.Write text
             ]
         ]
 

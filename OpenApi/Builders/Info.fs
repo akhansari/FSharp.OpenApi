@@ -1,7 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type InfoBuilder () =
 
@@ -18,6 +18,12 @@ type InfoBuilder () =
     [<CustomOperation "version">]
     member _.Version (state: OpenApiInfo, value) =
         state.Version <- value
+        state
+
+    /// A short summary of the API.
+    [<CustomOperation "summary">]
+    member _.Summary (state: OpenApiInfo, value) =
+        state.Summary <- value
         state
 
     /// A short description of the API. CommonMark syntax.
@@ -45,6 +51,7 @@ type InfoBuilder () =
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiInfo, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiInfo, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
+        values |> Seq.iter state.Extensions.Add
         state

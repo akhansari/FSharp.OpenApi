@@ -1,7 +1,7 @@
 ﻿namespace OpenApi.Builders
 
+open System.Collections.Generic
 open Microsoft.OpenApi
-open Microsoft.OpenApi.Models
 
 type OAuthFlowBuilder () =
 
@@ -29,11 +29,13 @@ type OAuthFlowBuilder () =
     /// The available scopes for the OAuth2 security scheme.
     /// A map between the scope name and a short description for it. The map MAY be empty.
     [<CustomOperation "scopes">]
-    member _.Scopes (state: OpenApiOAuthFlow, value: KVs<string, string>) =
-        value |> Seq.iter state.Scopes.Add
+    member _.Scopes (state: OpenApiOAuthFlow, values: KVs<string, string>) =
+        if isNull state.Scopes then state.Scopes <- Dictionary()
+        values |> Seq.iter state.Scopes.Add
         state
 
     [<CustomOperation "extensions">]
-    member _.Extensions (state: OpenApiOAuthFlow, value: KVs<_, Interfaces.IOpenApiExtension>) =
-        value |> Seq.iter state.Extensions.Add
+    member _.Extensions (state: OpenApiOAuthFlow, values: KVs<_, IOpenApiExtension>) =
+        if isNull state.Extensions then state.Extensions <- Dictionary()
+        values |> Seq.iter state.Extensions.Add
         state

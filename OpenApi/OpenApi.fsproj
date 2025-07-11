@@ -19,6 +19,7 @@
     <Compile Include="Builders\Discriminator.fs" />
     <Compile Include="Builders\Document.fs" />
     <Compile Include="Builders\Encoding.fs" />
+    <Compile Include="Builders\Error.fs" />
     <Compile Include="Builders\Example.fs" />
     <Compile Include="Builders\ExternalDocs.fs" />
     <Compile Include="Builders\Header.fs" />
@@ -31,7 +32,6 @@
     <Compile Include="Builders\Operation.fs" />
     <Compile Include="Builders\Parameter.fs" />
     <Compile Include="Builders\PathItem.fs" />
-    <Compile Include="Builders\Reference.fs" />
     <Compile Include="Builders\RequestBody.fs" />
     <Compile Include="Builders\Response.fs" />
     <Compile Include="Builders\Schema.fs" />
@@ -40,13 +40,14 @@
     <Compile Include="Builders\Server.fs" />
     <Compile Include="Builders\ServerVariable.fs" />
     <Compile Include="Builders\Tag.fs" />
+    <Compile Include="Builders\Xml.fs" />
     <Compile Include="Expressions.fs" />
     <Compile Include="Factory.fs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.OpenApi" Version="1.6.*" />
-    <PackageReference Include="System.Text.Json" Version="8.0.*" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.0.0" />
+    <PackageReference Include="System.Text.Json" Version="9.0.7" />
   </ItemGroup>
 
 </Project>
