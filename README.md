@@ -10,6 +10,11 @@ F# Wrapper for [OpenAPI.NET SDK](https://github.com/microsoft/OpenAPI.NET).
 Creating an OpenAPI document
 
 ```fsharp
+open System.Net
+open System.Net.Http
+open OpenApi
+open Microsoft.OpenApi
+
 let document =
     apiDocument {
         info (apiInfo {
@@ -24,7 +29,7 @@ let document =
         paths [
             "/pets", apiPathItem {
                 operations [
-                    OperationType.Get, apiOperation {
+                    HttpMethod.Get, apiOperation {
                         description "Returns all pets from the system that the user has access to"
                         responses [
                             HttpStatusCode.OK, apiResponse {
@@ -38,5 +43,6 @@ let document =
     }
 
 let outputString =
-    document.Serialize (OpenApiSpecVersion.OpenApi3_0, OpenApiFormat.Json)
+    document.SerializeAsJsonAsync OpenApiSpecVersion.OpenApi3_1
+    |> Async.AwaitTask |> Async.RunSynchronously 
 ```
