@@ -1,5 +1,6 @@
 ﻿namespace OpenApi.Builders
 
+open System.Net
 open System.Collections.Generic
 open Microsoft.OpenApi
 
@@ -12,7 +13,13 @@ type OperationBuilder () =
     [<CustomOperation "responses">]
     member _.Responses (state: OpenApiOperation, values: KVs<'HttpStatusCode, OpenApiResponse>) =
         if isNull state.Responses then state.Responses <- OpenApiResponses()
-        values |> Seq.iter (fun (k, v) -> state.Responses.Add (string k, v))
+        values
+        |> Seq.iter (fun (k, v) ->
+            let key =
+                match box k with
+                | :? HttpStatusCode as statusCode -> string (int statusCode)
+                | _ -> string k
+            state.Responses.Add (key, v))
         state
 
     [<CustomOperation "tags">]

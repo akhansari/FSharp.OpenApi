@@ -27,7 +27,7 @@ type DocumentBuilder () =
 
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiDocument, value) =
-        if state.Servers = null then state.Servers <- List()
+        if isNull state.Servers then state.Servers <- List()
         Seq.iter state.Servers.Add value
         state
 
@@ -55,7 +55,7 @@ type DocumentBuilder () =
 
     [<CustomOperation "tags">]
     member _.Tags (state: OpenApiDocument, values) =
-        if state.Tags = null then state.Tags <- HashSet()
+        if isNull state.Tags then state.Tags <- HashSet()
         values |> Seq.iter (state.Tags.Add >> ignore)
         state
 

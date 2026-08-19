@@ -1,4 +1,4 @@
-#r "nuget: Microsoft.CodeAnalysis.CSharp, 4.12.0"
+#r "nuget: Microsoft.CodeAnalysis.CSharp, 5.9.0"
 
 open System
 open System.IO
@@ -6,7 +6,7 @@ open Microsoft.CodeAnalysis.CSharp
 open Microsoft.CodeAnalysis.CSharp.Syntax
 
 let models =
-    let modelsPath = Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "OpenAPI.NET", "src", "Microsoft.OpenApi", "Models")
+    let modelsPath = Path.Combine(__SOURCE_DIRECTORY__, "..", "..", "..", "pb", "OpenAPI.NET", "src", "Microsoft.OpenApi", "Models")
     Directory.EnumerateFiles(modelsPath, "OpenApi*.cs")
     |> Seq.map (fun path -> {| Path = path; Name = Path.GetFileNameWithoutExtension(path).Replace("OpenApi", "") |})
     |> Seq.toList
