@@ -11,6 +11,9 @@ on:
 jobs:
   build-publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -18,9 +21,6 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
-          source-url: https://api.nuget.org/v3/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Setup variables
         run: |
           echo "TAG_VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_ENV
@@ -43,5 +43,10 @@ jobs:
           files: ${{env.NUGET_PACKAGE_PATH}}
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: akhansari
       - name: Publish NuGet package
-        run: dotnet nuget push ${{env.NUGET_PACKAGE_PATH}} --api-key ${{secrets.NUGET_TOKEN}} --force-english-output
+        run: dotnet nuget push ${{env.NUGET_PACKAGE_PATH}} --api-key ${{steps.login.outputs.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json --force-english-output
