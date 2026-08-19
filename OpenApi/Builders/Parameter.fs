@@ -45,16 +45,6 @@ type ParameterBuilder () =
         state.Deprecated <- value
         state
 
-    /// Sets the ability to pass empty-valued parameters.
-    /// This is valid only for query parameters and allows sending a parameter with an empty value.
-    /// Default value is false.
-    /// If style is used, and if behavior is n/a (cannot be serialized), the value of allowEmptyValue SHALL be ignored.
-    /// Use of this property is NOT RECOMMENDED, as it is likely to be removed in a later revision.
-    [<CustomOperation "allowEmptyValue">]
-    member _.AllowEmptyValue (state: OpenApiParameter, value) =
-        state.AllowEmptyValue <- value
-        state
-
     /// Describes how the parameter value will be serialized depending on the type of the parameter value.
     /// Default values (based on value of in): for query - form; for path - simple; for header - simple; for cookie - form.
     [<CustomOperation "style">]

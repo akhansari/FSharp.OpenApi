@@ -227,7 +227,8 @@ type SchemaBuilder () =
 
     [<CustomOperation "example">]
     member _.Example (state: OpenApiSchema, value) =
-        state.Example <- value
+        if isNull state.Examples then state.Examples <- List()
+        state.Examples.Add value
         state
 
     [<CustomOperation "examples">]
@@ -280,4 +281,3 @@ type SchemaBuilder () =
         if isNull state.Metadata then state.Metadata <- Dictionary()
         values |> Seq.iter state.Metadata.Add
         state
-
