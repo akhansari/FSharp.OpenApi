@@ -6,7 +6,7 @@ open Microsoft.OpenApi
 open OpenApi
 open Xunit
 
-type private Example =
+type Example =
     { FirstName: string }
 
 let private createFactory version =
