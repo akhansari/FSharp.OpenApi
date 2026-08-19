@@ -43,6 +43,6 @@ let document =
     }
 
 let outputString =
-    document.SerializeAsJsonAsync OpenApiSpecVersion.OpenApi3_1
+    document.SerializeAsJsonAsync OpenApiSpecVersion.OpenApi3_2
     |> Async.AwaitTask |> Async.RunSynchronously 
 ```

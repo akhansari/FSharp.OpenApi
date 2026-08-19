@@ -25,6 +25,12 @@ type DocumentBuilder () =
         state.JsonSchemaDialect <- value
         state
 
+    /// The URI identifying this document.
+    [<CustomOperation "self">]
+    member _.Self (state: OpenApiDocument, value) =
+        state.Self <- value
+        state
+
     [<CustomOperation "servers">]
     member _.Servers (state: OpenApiDocument, value) =
         if isNull state.Servers then state.Servers <- List()

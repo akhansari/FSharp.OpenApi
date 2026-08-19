@@ -30,6 +30,26 @@ type EncodingBuilder () =
         values |> Seq.iter state.Headers.Add
         state
 
+    /// A map of property names to nested encoding information.
+    [<CustomOperation "encoding">]
+    member _.Encoding (state: OpenApiEncoding, values: KVs<_, OpenApiEncoding>) =
+        if isNull state.Encoding then state.Encoding <- Dictionary()
+        values |> Seq.iter state.Encoding.Add
+        state
+
+    /// Encoding information for repeated array items.
+    [<CustomOperation "itemEncoding">]
+    member _.ItemEncoding (state: OpenApiEncoding, value) =
+        state.ItemEncoding <- value
+        state
+
+    /// Encoding information for tuple-style array items.
+    [<CustomOperation "prefixEncoding">]
+    member _.PrefixEncoding (state: OpenApiEncoding, values) =
+        if isNull state.PrefixEncoding then state.PrefixEncoding <- List()
+        values |> Seq.iter state.PrefixEncoding.Add
+        state
+
     /// Describes how a specific property value will be serialized depending on its type.
     /// See Parameter Object for details on the style property.
     /// The behavior follows the same values as query parameters, including default values.

@@ -8,6 +8,12 @@ type ServerBuilder () =
     member _.Yield _ =
         OpenApiServer ()
 
+    /// A unique name identifying the server.
+    [<CustomOperation "name">]
+    member _.Name (state: OpenApiServer, value) =
+        state.Name <- value
+        state
+
     /// REQUIRED. A URL to the target host.
     /// This URL supports Server Variables and MAY be relative,
     /// to indicate that the host location is relative to the location

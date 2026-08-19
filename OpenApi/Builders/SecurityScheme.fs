@@ -45,6 +45,18 @@ type SecuritySchemeBuilder () =
         state.OpenIdConnectUrl <- value
         state
 
+    /// OAuth 2.0 authorization server metadata URL.
+    [<CustomOperation "oauth2MetadataUrl">]
+    member _.OAuth2MetadataUrl (state: OpenApiSecurityScheme, value) =
+        state.OAuth2MetadataUrl <- value
+        state
+
+    /// Specifies that a security scheme is deprecated.
+    [<CustomOperation "deprecated">]
+    member _.Deprecated (state: OpenApiSecurityScheme, value) =
+        state.Deprecated <- value
+        state
+
 
     /// A short description for security scheme. CommonMark syntax.
     [<CustomOperation "description">]

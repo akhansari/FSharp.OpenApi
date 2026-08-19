@@ -2,6 +2,7 @@ module FactoryTests
 
 open System.Net.Http
 open System.Text.Json
+open System.Text.Json.Nodes
 open Microsoft.OpenApi
 open OpenApi
 open Xunit
@@ -79,3 +80,13 @@ let ``MakeJsonContent uses the configured serializer options`` () =
 
     Assert.Equal("Ada", actual["firstName"].GetValue<string>())
     Assert.Null(actual["FirstName"])
+
+[<Fact>]
+let ``Serialize defaults to native OpenAPI 3.2 output`` () =
+    let factory = createFactory "1.0.0"
+    factory.Document.Self <- System.Uri "https://example.com/openapi.json"
+
+    let output = factory.Serialize() |> JsonNode.Parse
+
+    Assert.Equal("3.2.0", output["openapi"].GetValue<string>())
+    Assert.Equal("https://example.com/openapi.json", output["$self"].GetValue<string>())

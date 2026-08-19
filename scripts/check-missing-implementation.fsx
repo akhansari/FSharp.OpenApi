@@ -12,7 +12,11 @@ let models =
     |> Seq.toList
 
 let builders =
-    let excluded = Set [ "Constants"; "ExtensibleDictionary" ]
+    let excluded =
+        Set [ "Constants"
+              "ExtensibleDictionary"
+              "ReferenceWithDescription"
+              "ReferenceWithDescriptionAndSummary" ]
     let buildersPath = Path.Combine(__SOURCE_DIRECTORY__, "..", "OpenApi", "Builders")
     models
     |> List.filter (fun model -> excluded |> Set.contains model.Name |> not)
@@ -24,10 +28,24 @@ let builders =
 let getPublicProperties (modelPath: string) =
     let code = File.ReadAllText modelPath
     let root = CSharpSyntaxTree.ParseText(code).GetRoot()
+    let hasPublicSetter (prop: PropertyDeclarationSyntax) =
+        if isNull prop.AccessorList then false
+        else
+            prop.AccessorList.Accessors
+            |> Seq.exists (fun accessor ->
+                accessor.Kind() = SyntaxKind.SetAccessorDeclaration
+                && accessor.Modifiers
+                   |> Seq.exists (fun modifier ->
+                       modifier.Kind() = SyntaxKind.InternalKeyword
+                       || modifier.Kind() = SyntaxKind.PrivateKeyword
+                       || modifier.Kind() = SyntaxKind.ProtectedKeyword)
+                   |> not)
+
     root.DescendantNodes()
     |> Seq.choose (function 
         | :? PropertyDeclarationSyntax as prop when
-                prop.Modifiers |> Seq.exists (fun m -> m.Kind() = SyntaxKind.PublicKeyword) ->
+                prop.Modifiers |> Seq.exists (fun m -> m.Kind() = SyntaxKind.PublicKeyword)
+                && hasPublicSetter prop ->
             Some prop.Identifier.Text
         | _ -> None)
     |> Seq.toList

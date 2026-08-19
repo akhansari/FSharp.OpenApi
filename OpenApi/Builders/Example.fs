@@ -28,6 +28,18 @@ type ExampleBuilder () =
         state.Value <- value
         state
 
+    /// Embedded example data represented as JSON or YAML values.
+    [<CustomOperation "dataValue">]
+    member _.DataValue (state: OpenApiExample, value) =
+        state.DataValue <- value
+        state
+
+    /// The serialized representation of the example.
+    [<CustomOperation "serializedValue">]
+    member _.SerializedValue (state: OpenApiExample, value) =
+        state.SerializedValue <- value
+        state
+
     /// A URL that points to the literal example. This provides the capability to reference examples
     /// that cannot easily be included in JSON or YAML documents.
     /// The value field and externalValue field are mutually exclusive.

@@ -26,6 +26,12 @@ type OAuthFlowBuilder () =
         state.RefreshUrl <- value
         state
 
+    /// REQUIRED for device authorization flows. The device authorization endpoint URL.
+    [<CustomOperation "deviceAuthorizationUrl">]
+    member _.DeviceAuthorizationUrl (state: OpenApiOAuthFlow, value) =
+        state.DeviceAuthorizationUrl <- value
+        state
+
     /// The available scopes for the OAuth2 security scheme.
     /// A map between the scope name and a short description for it. The map MAY be empty.
     [<CustomOperation "scopes">]

@@ -4,8 +4,8 @@ module OpenApi.Expressions
 open OpenApi.Builders
 
 (*
-    Documentation from version 3.0.3
-    https://swagger.io/specification/
+    Documentation from version 3.2.0
+    https://spec.openapis.org/oas/v3.2.0.html
 *)
 
 /// A map of possible out-of band callbacks related to the parent operation.
@@ -114,4 +114,3 @@ let apiServerVariable = ServerVariableBuilder ()
 let apiTag = TagBuilder ()
 
 let apiXml = XmlBuilder ()
-
