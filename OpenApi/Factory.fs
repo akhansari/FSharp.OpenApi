@@ -19,7 +19,7 @@ type OpenApiFactory =
         else $"/openapi/{this.Version}.json"
 
     member this.Serialize (?version, ?format) =
-        let version = defaultArg version OpenApiSpecVersion.OpenApi3_1
+        let version = defaultArg version OpenApiSpecVersion.OpenApi3_2
         let format = defaultArg format "JSON"
         this.Document.SerializeAsync(version, format) |> Async.AwaitTask |> Async.RunSynchronously 
 
@@ -32,7 +32,10 @@ type OpenApiFactory =
 
     member this.AddOperation operationType path operation =
         if this.Document.Paths.ContainsKey path then
-            this.Document.Paths[path].Operations.Add (operationType, operation)
+            let pathItem = this.Document.Paths[path]
+            match pathItem with
+            | :? OpenApiPathItem as item -> item.AddOperation (operationType, operation)
+            | item -> item.Operations.Add (operationType, operation)
         else
             let item = apiPathItem { operations [ operationType, operation ] }
             this.Document.Paths.Add (path, item)

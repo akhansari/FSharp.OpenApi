@@ -9,13 +9,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Setup environment
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: |
-            8.0.x
+            10.0.x
       - name: Restore tools
         run: dotnet tool restore
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
+      - name: Test
+        run: dotnet test --configuration Release --no-build

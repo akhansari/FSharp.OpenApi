@@ -1,5 +1,6 @@
 namespace OpenApi.Builders
 
+open System
 open System.Collections.Generic
 open Microsoft.OpenApi
 
@@ -25,12 +26,7 @@ type XmlBuilder () =
 
     [<CustomOperation "attribute">]
     member _.Attribute (state: OpenApiXml, value) =
-        state.Attribute <- value
-        state
-
-    [<CustomOperation "Wrapped">]
-    member _.Wrapped (state: OpenApiXml, value) =
-        state.Wrapped <- value
+        state.NodeType <- if value then Nullable OpenApiXmlNodeType.Attribute else Nullable()
         state
 
     [<CustomOperation "extensions">]

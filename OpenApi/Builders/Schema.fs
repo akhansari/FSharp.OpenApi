@@ -58,6 +58,12 @@ type SchemaBuilder () =
         state.DynamicAnchor <- value
         state
 
+    /// A plain-name fragment identifier for this schema resource.
+    [<CustomOperation "anchor">]
+    member _.Anchor (state: OpenApiSchema, value) =
+        state.Anchor <- value
+        state
+
     [<CustomOperation "definitions">]
     member _.Definitions (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
         if isNull state.Definitions then state.Definitions <- Dictionary()
@@ -67,6 +73,26 @@ type SchemaBuilder () =
     [<CustomOperation "unevaluatedPropertie">]
     member _.UnevaluatedProperties (state: OpenApiSchema, value) =
         state.UnevaluatedProperties <- value
+        state
+
+    [<CustomOperation "unevaluatedPropertiesSchema">]
+    member _.UnevaluatedPropertiesSchema (state: OpenApiSchema, value) =
+        state.UnevaluatedPropertiesSchema <- value
+        state
+
+    [<CustomOperation "contentEncoding">]
+    member _.ContentEncoding (state: OpenApiSchema, value) =
+        state.ContentEncoding <- value
+        state
+
+    [<CustomOperation "contentMediaType">]
+    member _.ContentMediaType (state: OpenApiSchema, value) =
+        state.ContentMediaType <- value
+        state
+
+    [<CustomOperation "contentSchema">]
+    member _.ContentSchema (state: OpenApiSchema, value) =
+        state.ContentSchema <- value
         state
 
     [<CustomOperation "externalDoc">]
@@ -157,6 +183,21 @@ type SchemaBuilder () =
         value |> Seq.iter (fun v -> state.AnyOf.Add v)
         state
 
+    [<CustomOperation "ifSchema">]
+    member _.If (state: OpenApiSchema, value) =
+        state.If <- value
+        state
+
+    [<CustomOperation "thenSchema">]
+    member _.Then (state: OpenApiSchema, value) =
+        state.Then <- value
+        state
+
+    [<CustomOperation "elseSchema">]
+    member _.Else (state: OpenApiSchema, value) =
+        state.Else <- value
+        state
+
     [<CustomOperation "notEqual">]
     member _.Not (state: OpenApiSchema, value) =
         state.Not <- value
@@ -171,6 +212,21 @@ type SchemaBuilder () =
     [<CustomOperation "Items">]
     member _.Items (state: OpenApiSchema, value) =
         state.Items <- value
+        state
+
+    [<CustomOperation "contains">]
+    member _.Contains (state: OpenApiSchema, value) =
+        state.Contains <- value
+        state
+
+    [<CustomOperation "maxContains">]
+    member _.MaxContains (state: OpenApiSchema, value) =
+        state.MaxContains <- Nullable value
+        state
+
+    [<CustomOperation "minContains">]
+    member _.MinContains (state: OpenApiSchema, value) =
+        state.MinContains <- Nullable value
         state
 
     [<CustomOperation "maxItems">]
@@ -192,6 +248,17 @@ type SchemaBuilder () =
     member _.Properties (state: OpenApiSchema, values: KVs<_, OpenApiSchema>) =
         if isNull state.Properties then state.Properties <- Dictionary()
         values |> Seq.iter state.Properties.Add
+        state
+
+    [<CustomOperation "propertyNames">]
+    member _.PropertyNames (state: OpenApiSchema, value) =
+        state.PropertyNames <- value
+        state
+
+    [<CustomOperation "dependentSchemas">]
+    member _.DependentSchemas (state: OpenApiSchema, values: KVs<_, IOpenApiSchema>) =
+        if isNull state.DependentSchemas then state.DependentSchemas <- Dictionary()
+        values |> Seq.iter state.DependentSchemas.Add
         state
 
     [<CustomOperation "patternPropertie">]
@@ -227,7 +294,8 @@ type SchemaBuilder () =
 
     [<CustomOperation "example">]
     member _.Example (state: OpenApiSchema, value) =
-        state.Example <- value
+        if isNull state.Examples then state.Examples <- List()
+        state.Examples.Add value
         state
 
     [<CustomOperation "examples">]
@@ -280,4 +348,3 @@ type SchemaBuilder () =
         if isNull state.Metadata then state.Metadata <- Dictionary()
         values |> Seq.iter state.Metadata.Add
         state
-

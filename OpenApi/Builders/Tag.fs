@@ -18,6 +18,21 @@ type TagBuilder () =
         state.Description <- value
         state
 
+    [<CustomOperation "summary">]
+    member _.Summary (state: OpenApiTag, value) =
+        state.Summary <- value
+        state
+
+    [<CustomOperation "parent">]
+    member _.Parent (state: OpenApiTag, value) =
+        state.Parent <- OpenApiTagReference value
+        state
+
+    [<CustomOperation "kind">]
+    member _.Kind (state: OpenApiTag, value) =
+        state.Kind <- value
+        state
+
     [<CustomOperation "externalDocs">]
     member _.ExternalDocs (state: OpenApiTag, value) =
         state.ExternalDocs <- value

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/SolutionFolder/">
+    <File Path=".github/workflows/on-pull-request.yml" />
+    <File Path=".github/workflows/on-release-tag.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="OpenApi.Sample.Routing/OpenApi.Sample.Routing.fsproj" />
+  <Project Path="OpenApi.Tests/OpenApi.Tests.fsproj" />
+  <Project Path="OpenApi/OpenApi.fsproj" />
+</Solution>

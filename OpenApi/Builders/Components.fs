@@ -68,6 +68,12 @@ type ComponentsBuilder () =
         values |> Seq.iter state.PathItems.Add
         state
 
+    [<CustomOperation "mediaTypes">]
+    member _.MediaTypes (state: OpenApiComponents, values: KVs<_, IOpenApiMediaType>) =
+        if isNull state.MediaTypes then state.MediaTypes <- Dictionary()
+        values |> Seq.iter state.MediaTypes.Add
+        state
+
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiComponents, values: KVs<_, IOpenApiExtension>) =
         if isNull state.Extensions then state.Extensions <- Dictionary()

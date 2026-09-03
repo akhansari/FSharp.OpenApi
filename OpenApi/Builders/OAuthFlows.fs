@@ -32,6 +32,12 @@ type OAuthFlowsBuilder () =
         state.AuthorizationCode <- value
         state
 
+    /// Configuration for the OAuth Device Authorization flow.
+    [<CustomOperation "deviceAuthorization">]
+    member _.DeviceAuthorization (state: OpenApiOAuthFlows, value) =
+        state.DeviceAuthorization <- value
+        state
+
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiOAuthFlows, values: KVs<_, IOpenApiExtension>) =
         if isNull state.Extensions then state.Extensions <- Dictionary()

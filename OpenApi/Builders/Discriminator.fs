@@ -21,6 +21,12 @@ type DiscriminatorBuilder () =
         values |> Seq.iter state.Mapping.Add
         state
 
+    /// The fallback schema for an absent or unmapped discriminator value.
+    [<CustomOperation "defaultMapping">]
+    member _.DefaultMapping (state: OpenApiDiscriminator, value) =
+        state.DefaultMapping <- value
+        state
+
     [<CustomOperation "extensions">]
     member _.Extensions (state: OpenApiDiscriminator, values: KVs<_, IOpenApiExtension>) =
         if isNull state.Extensions then state.Extensions <- Dictionary()

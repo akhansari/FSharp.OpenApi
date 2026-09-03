@@ -9,6 +9,12 @@ type ResponseBuilder () =
     member _.Yield _ =
         OpenApiResponse ()
 
+    /// A short summary of the response meaning.
+    [<CustomOperation "summary">]
+    member _.Summary (state: OpenApiResponse, value) =
+        state.Summary <- value
+        state
+
     /// REQUIRED. A short description of the response. CommonMark syntax.
     [<CustomOperation "description">]
     member _.Description (state: OpenApiResponse, value) =
